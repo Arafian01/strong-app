@@ -30,27 +30,32 @@ class AuthenticatedSessionController extends Controller
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
         ]);
-    
+
         if (!Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
             throw ValidationException::withMessages([
                 'email' => __('auth.failed'),
             ]);
         }
-    
+
         $user = Auth::user();
-    
+
         // Jika user adalah pelanggan, cek statusnya
         if ($user->role === 'pelanggan') {
             $pelanggan = Pelanggan::where('user_id', $user->id)->first();
-            
+
             if ($pelanggan && $pelanggan->status === 'nonaktif') {
                 Auth::logout(); // Logout user
                 return back()->withErrors(['email' => 'Akun belum diverifikasi.']);
             }
-        }
-    
-        // Redirect ke dashboard setelah login berhasil
+            return redirect()->intended(route('dashboard'));
+        } 
+
+        if ($user->role === 'admin') {
+            return redirect()->intended(route('dashboardAdmin.index'));
+        } 
+        
         return redirect()->intended(route('dashboard'));
+
     }
 
     /**
