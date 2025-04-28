@@ -10,6 +10,7 @@ use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TagihanController;
+use App\Http\Controllers\tagihanUserController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -31,15 +32,18 @@ Route::middleware('auth')->group(function () {
     Route::post('/notifikasi/baca/{id}', [NotifikasiController::class, 'baca'])->name('notifikasi.baca');
     Route::put('/notifikasi/{id}', [NotifikasiController::class, 'update'])->name('notifikasi.update');
     Route::delete('/notifikasi/{id}', [NotifikasiController::class, 'destroy'])->name('notifikasi.destroy');
+    Route::resource('pembayaran', PembayaranController::class)->middleware(['auth']);
+    Route::resource('tagihan', tagihanUserController::class)->middleware(['auth']);
 });
 Route::resource('error', ErrorController::class);
 Route::resource('user', UserController::class)->middleware(['auth', RoleMiddleware::class]);;
 Route::resource('paket', PaketController::class)->middleware(['auth', RoleMiddleware::class]);
 Route::resource('pelanggan', PelangganController::class)->middleware(['auth', RoleMiddleware::class]);
-Route::resource('tagihan', TagihanController::class)->middleware(['auth', RoleMiddleware::class]);
-Route::resource('pembayaran', PembayaranController::class)->middleware(['auth', RoleMiddleware::class]);
-Route::get('/', [DashboardController::class, 'index'])->middleware('auth');
+Route::resource('tagihanAdmin', TagihanController::class)->middleware(['auth', RoleMiddleware::class]);
+Route::resource('pembayaranAdmin', PembayaranController::class)->middleware(['auth', RoleMiddleware::class]);
+Route::resource('dashboardAdmin', DashboardController::class)->middleware(['auth', RoleMiddleware::class]);
 Route::resource('laporan', laporanController::class)->middleware(['auth', RoleMiddleware::class]);
+
 
 
 
