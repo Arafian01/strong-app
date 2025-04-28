@@ -44,7 +44,7 @@
                 Swal.fire({
                     icon: 'success',
                     title: 'Berhasil!',
-                    text: '{{   }}',
+                    text: '{{  Session::get('message_insert') }}',
                     timer: 3000
                 });
             </script>
