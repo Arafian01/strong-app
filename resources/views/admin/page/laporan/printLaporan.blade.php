@@ -1,267 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laporan Pembayaran</title>
-    <style>
-        body {
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            background-color: #FAFAFA;
-            font: 12pt "Tahoma";
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center center;
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            @media print {
+                .page-break { page-break-after: always; }
+                thead { display: table-header-group; }
+            }
         }
-
-        * {
-            box-sizing: border-box;
-            -moz-box-sizing: border-box;
-        }
-
-        .subpage {
-            padding: 1cm;
-            border: 5px red solid;
-            height: 257mm;
-            outline: 2cm #FFEAEA solid;
-        }
-
-        td {
-            padding-top: 5px;
-        }
-
-        .kp {
-            text-align: center;
-        }
-
-        .left {
-            text-align: left;
-        }
-
-        .logo {
-            text-align: center;
-            font-size: small;
-        }
-
-        .text {
-            text-align: center;
-            margin-top: 15px;
-        }
-
-        .cntr {
-            font-size: small;
-            text-align: left;
-            margin-left: 40px;
-            margin-right: 40px;
-        }
-
-        .translation {
-            display: block;
-            font-size: small;
-            margin-top: -9px;
-            font-style: italic;
-        }
-
-        table {
-            border-collapse: collapse;
-            margin-left: 40px;
-            margin-right: 40px;
-            margin-top: 40px;
-            width: 100%;
-            /* Ensure table takes full width */
-        }
-
-        .ini {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-            font-size: small;
-            padding: 0;
-        }
-
-        .ttd {
-            text-align: left;
-            font-size: small;
-            padding: 0px;
-            margin-top: -10px;
-            font-style: italic;
-        }
-
-        .ttd1 {
-            text-align: left;
-            font-size: small;
-            padding: 0px;
-        }
-
-        .left {
-            padding-left: 10px;
-        }
-
-        .footer {
-            background: #204b8c;
-            color: #fff;
-            text-align: center;
-            font-size: small;
-            padding-top: 10px;
-            padding-bottom: 10px;
-        }
-
-        .ket {
-            margin-left: 290px;
-        }
-
-        body {
-            font-family: 'Tahoma';
-        }
-
-        .tengah {
-            text-align: center;
-        }
-
-        .page {
-            width: 297mm;
-            /* Adjusted for A4 landscape width */
-            min-height: 210mm;
-            /* Adjusted for A4 landscape height */
-            padding: 0mm;
-            margin: 0mm auto;
-            border: 1px #D3D3D3 solid;
-            border-radius: 5px;
-            background: white;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
-
-        .page::before {
-            content: "";
-            top: 0;
-            left: 0;
-            width: 189px;
-            height: 189px;
-            background-size: cover;
-            background-repeat: no-repeat;
-        }
-
-        .page::after {
-            content: "";
-            bottom: 0;
-            right: 0;
-            width: 794px;
-            height: 49px;
-            background-size: cover;
-            background-repeat: no-repeat;
-        }
-
         @page {
             size: A4 landscape;
-            /* Change to landscape */
-            margin: 0;
-        }
-
-        @media print {
-
-            html,
-            body {
-                width: 297mm;
-                /* Adjusted for A4 landscape width */
-                height: 210mm;
-                /* Adjusted for A4 landscape height */
-            }
-
-            .page {
-                padding: 0mm;
-                margin: 0mm auto;
-                border: 1 px #D3D3D3 solid;
-                border-radius: 5px;
-                background: white;
-                box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-                position: relative;
-            }
-
-            .page::before {
-                content: "";
-                top: 0;
-                left: 0;
-                width: 189px;
-                height: 189px;
-                background-size: cover;
-                background-repeat: no-repeat;
-            }
-
-            .page::after {
-                content: "";
-                bottom: 0;
-                right: 0;
-                width: 794px;
-                height: 49px;
-                background-size: cover;
-                background-repeat: no-repeat;
-            }
+            margin: 1cm;
         }
     </style>
-    <script src="https://cdn.tailwindcss.com"></script>
 </head>
+<body class="bg-gray-100 text-sm font-sans">
 
-<body>
+    <div class="bg-white p-6 mx-auto w-[297mm] min-h-[210mm]">
+        <!-- Header -->
+        <div class="flex items-center border-b-2 pb-4 mb-6">
+            <div class="w-20 h-20 bg-contain bg-no-repeat bg-center" style="background-image: url('logo.png');"></div>
+            <div class="flex-1 text-center text-2xl font-bold">Laporan Pembayaran</div>
+        </div>
 
-    <div class="book">
-        <div class="page" id="result">
-            <div class="ml-[6px] mr-[90px]">
-                <table class="border border-1 border-black w-full">
-                    <thead>
-                        <tr>
-                            <th class="border border-1 border-black">NO</th>
-                            <th class="border border-1 border-black">Nama</th>
-                            {{-- bulan selama setahun --}}
-                            <th class="border border-1 border-black">Januari</th>
-                            <th class="border border-1 border-black">Februari</th>
-                            <th class="border border-1 border-black">Maret</th>
-                            <th class="border border-1 border-black">April</th>
-                            <th class="border border-1 border-black">Mei</th>
-                            <th class="border border-1 border-black">Juni</th>
-                            <th class="border border-1 border-black">Juli</th>
-                            <th class="border border-1 border-black">Agustus</th>
-                            <th class="border border-1 border-black">September</th>
-                            <th class="border border-1 border-black">Oktober</th>
-                            <th class="border border-1 border-black">November</th>
-                            <th class="border border-1 border-black">Desember</th>
+        <!-- Table -->
+        <div class="overflow-x-auto">
+            <table class="w-full border border-black text-center">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="border border-black p-2">NO</th>
+                        <th class="border border-black p-2">Nama</th>
+                        <th class="border border-black p-2">Januari</th>
+                        <th class="border border-black p-2">Februari</th>
+                        <th class="border border-black p-2">Maret</th>
+                        <th class="border border-black p-2">April</th>
+                        <th class="border border-black p-2">Mei</th>
+                        <th class="border border-black p-2">Juni</th>
+                        <th class="border border-black p-2">Juli</th>
+                        <th class="border border-black p-2">Agustus</th>
+                        <th class="border border-black p-2">September</th>
+                        <th class="border border-black p-2">Oktober</th>
+                        <th class="border border-black p-2">November</th>
+                        <th class="border border-black p-2">Desember</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @php
+                        $no = 1;
+                    @endphp
+                    @foreach ($pelanggan as $p)
+                        <tr class="break-inside-avoid">
+                            <td class="border border-black p-1">{{ $no++ }}</td>
+                            <td class="border border-black p-1 text-left pl-2">{{ $p->user->name }}</td>
+
+                            @for ($i = 1; $i <= 12; $i++)
+                                @php
+                                    $bulanFormat = $tahun . '-' . str_pad($i, 2, '0', STR_PAD_LEFT);
+                                    $status = null;
+                                    if (isset($tagihan[$p->id])) {
+                                        $tagihanBulanIni = $tagihan[$p->id]->where('bulan_tahun', $bulanFormat)->first();
+                                        if ($tagihanBulanIni) {
+                                            $status = $tagihanBulanIni->status_pembayaran;
+                                        }
+                                    }
+                                @endphp
+                                <td class="border border-black p-1">
+                                    @if ($status == 'lunas')
+                                        ✔️
+                                    @elseif ($status == 'menunggu_verifikasi')
+                                        ⏳
+                                    @elseif ($status == 'belum_dibayar')
+                                        ❌
+                                    @else
+                                        -
+                                    @endif
+                                </td>
+                            @endfor
                         </tr>
-                    </thead>
-                    <tbody>
-                        @php
-                            $no = 1;
-                        @endphp
-                        @foreach ($pelanggan as $p)
-                            <tr>
-                                <td class="border border-1 border-black tengah">{{ $no++ }}</td>
-                                <td class="border border-1 border-black text-left pl-2">{{ $p->user->name }}</td>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 
-                                @for ($i = 1; $i <= 12; $i++)
-                                    @php
-                                        $bulanFormat = $tahun . '-' . str_pad($i, 2, '0', STR_PAD_LEFT); // Format jadi 2025-01, 2025-02, dst
-                                        $sudahBayar =
-                                            isset($tagihan[$p->id]) &&
-                                            $tagihan[$p->id]->where('bulan_tahun', $bulanFormat)->count() > 0;
-                                    @endphp
-                                    <td class="border border-1 border-black tengah">
-                                        {{ $sudahBayar ? '✔️' : '' }}
-                                    </td>
-                                @endfor
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+        <!-- Footer -->
+        <div class="flex justify-between mt-8">
+            <div class="w-1/2">
+                <p class="font-semibold">Keterangan:</p>
+                <ul class="list-disc list-inside">
+                    <li>✔️ : Sudah Lunas</li>
+                    <li>⏳ : Menunggu Verifikasi</li>
+                    <li>❌ : Belum Dibayar</li>
+                    <li>- : Tidak Ada Data</li>
+                </ul>
+            </div>
+            <div class="w-1/3 text-center">
+                <p class="mb-16">Mengetahui,</p>
+                <p>______________________</p>
+                <p>Petugas</p>
             </div>
         </div>
     </div>
-</body>
 
+    <script>
+        window.print();
+    </script>
+</body>
 </html>
-<script>
-    // window.print();
-</script>
