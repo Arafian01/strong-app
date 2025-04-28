@@ -40,7 +40,7 @@ class DashboardController extends Controller
                 return $tagihan->pelanggan->paket->harga ?? 0;
             });
 
-        return view('dashboard', [
+        return view('admin.page.dashboard.index', [
             'jumlahPelanggan' => $jumlahPelanggan,
             'jumlahTagihan' => $jumlahTagihan,
             'totalPenghasilan' => $totalPenghasilan,
