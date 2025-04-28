@@ -27,17 +27,17 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-6 sm:-my-px sm:ms-8 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="hover:text-red-600 transition-colors">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-
-                    <!-- Master Dropdown -->
                     @can('role-admin')
+                        <x-nav-link :href="route('dashboardAdmin.index')" :active="request()->routeIs('dashboardAdmin.index')" class="hover:text-red-600 transition-colors">
+                            {{ __('Dashboard') }}
+                        </x-nav-link>
+
                         <x-dropdown>
                             <x-slot name="trigger">
                                 <button
                                     class="flex items-center space-x-1 px-3 py-2 text-sm font-medium text-gray-600 hover:text-red-600 transition-colors">
-                                    <span class="{ 'text-red-600': request() -> routeIs('role.index', 'user.index', 'paket.index') }">Master</span>
+                                    <span
+                                        class="{ 'text-red-600': request() -> routeIs('role.index', 'user.index', 'paket.index') }">Master</span>
                                     <svg class="w-4 h-4 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd"
                                             d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -57,21 +57,35 @@
                                 </x-dropdown-link>
                             </x-slot>
                         </x-dropdown>
+
+                        <x-nav-link :href="route('tagihanAdmin.index')" :active="request()->routeIs('tagihanAdmin.index')" class="hover:text-red-600 transition-colors">
+                            {{ __('Tagihan') }}
+                        </x-nav-link>
+
+                        <x-nav-link :href="route('pembayaranAdmin.index')" :active="request()->routeIs('pembayaranAdmin.index')" class="hover:text-red-600 transition-colors">
+                            {{ __('Pembayaran') }}
+                        </x-nav-link>
                     @endcan
 
-                    <x-nav-link :href="route('tagihan.index')" :active="request()->routeIs('tagihan.index')" class="hover:text-red-600 transition-colors">
-                        {{ __('Tagihan') }}
-                    </x-nav-link>
+                    @can('role-user')
+                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="hover:text-red-600 transition-colors">
+                            {{ __('Dashboard') }}
+                        </x-nav-link>
 
-                    <x-nav-link :href="route('pembayaran.index')" :active="request()->routeIs('pembayaran.index')" class="hover:text-red-600 transition-colors">
-                        {{ __('Pembayaran') }}
-                    </x-nav-link>
+                        <x-nav-link :href="route('tagihan.index')" :active="request()->routeIs('tagihan.index')" class="hover:text-red-600 transition-colors">
+                            {{ __('Tagihan') }}
+                        </x-nav-link>
 
-                    {{-- saya ingin rolenya admin dan owner untuk mengelola laporan--}}
+                        <x-nav-link :href="route('pembayaran.index')" :active="request()->routeIs('pembayaran.index')" class="hover:text-red-600 transition-colors">
+                            {{ __('Pembayaran') }}
+                        </x-nav-link>
+                    @endcan
+
+                    {{-- saya ingin rolenya admin dan owner untuk mengelola laporan --}}
                     @can('access-laporan')
-                    <x-nav-link :href="route('laporan.index')" :active="request()->routeIs('laporan.index')" class="hover:text-red-600 transition-colors">
-                        {{ __('Laporan') }}
-                    </x-nav-link>
+                        <x-nav-link :href="route('laporan.index')" :active="request()->routeIs('laporan.index')" class="hover:text-red-600 transition-colors">
+                            {{ __('Laporan') }}
+                        </x-nav-link>
                     @endcan
                 </div>
             </div>
@@ -145,30 +159,45 @@
     <!-- Mobile Menu -->
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden bg-white/95 backdrop-blur-sm">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="px-4">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('paket.index')" :active="request()->routeIs('paket.index')" class="px-4">
-                {{ __('Paket') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('pelanggan.index')" :active="request()->routeIs('pelanggan.index')" class="px-4">
-                {{ __('Pelanggan') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('tagihan.index')" :active="request()->routeIs('tagihan.index')" class="px-4">
-                {{ __('Tagihan') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('pembayaran.index')" :active="request()->routeIs('pembayaran.index')" class="px-4">
-                {{ __('Pembayaran') }}
-            </x-responsive-nav-link>
+            @can('role-admin')
+                <x-responsive-nav-link :href="route('dashboardAdmin')" :active="request()->routeIs('dashboardAdmin')" class="px-4">
+                    {{ __('Dashboard') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('paket.index')" :active="request()->routeIs('paket.index')" class="px-4">
+                    {{ __('Paket') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('pelanggan.index')" :active="request()->routeIs('pelanggan.index')" class="px-4">
+                    {{ __('Pelanggan') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('tagihanAdmin.index')" :active="request()->routeIs('tagihanAdmin.index')" class="px-4">
+                    {{ __('Tagihan') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('pembayaranAdmin.index')" :active="request()->routeIs('pembayaranAdmin.index')" class="px-4">
+                    {{ __('Pembayaran') }}
+                </x-responsive-nav-link>
+            @endcan
+
+            @can('role-user')
+                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="px-4">
+                    {{ __('Dashboard') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('tagihan.index')" :active="request()->routeIs('tagihan.index')" class="px-4">
+                    {{ __('Tagihan') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('pembayaran.index')" :active="request()->routeIs('pembayaran.index')" class="px-4">
+                    {{ __('Pembayaran') }}
+                </x-responsive-nav-link>
+            @endcan
+
+            @can('access-laporan')
+                <x-responsive-nav-link :href="route('laporan.index')" :active="request()->routeIs('laporan.index')" class="px-4">
+                    {{ __('Laporan') }}
+                </x-responsive-nav-link>
+            @endcan
         </div>
 
         <!-- Mobile Profile -->
         <div class="pt-4 pb-1 border-t border-gray-200">
-            <div class="px-4 space-y-1">
-                <div class="font-medium text-gray-800">{{ Auth::user()->name }}</div>
-                <div class="text-sm text-gray-500">{{ Auth::user()->email }}</div>
-            </div>
-
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')" class="px-4">
                     {{ __('Profile') }}
