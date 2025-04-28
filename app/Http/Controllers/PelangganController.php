@@ -136,7 +136,7 @@ class PelangganController extends Controller
             $datauser = User::findOrFail($data->user_id);
             $datauser->delete();
             $data->delete();
-            return back()->with('message_success', 'Pelanggan berhasil dihapus');
+            return back()->with('message_insert', 'Pelanggan berhasil dihapus');
         } catch (\Exception $e) {
             return back()->with('error_mesaage', 'Terjadi kesalahan saat melakukan delete data: ' . $e->getMessage());
         }
