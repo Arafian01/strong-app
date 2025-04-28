@@ -15,14 +15,11 @@ class laporanController extends Controller
     }
     public function store(Request $request)
     {
-        $tahun = $request->input('bulan_tahun'); // contoh: 2025
+        $tahun = $request->input('bulan_tahun');
 
-        // Semua pelanggan
         $pelanggan = Pelanggan::with('user')->get();
 
-        // Ambil semua tagihan di tahun itu
         $tagihan = Tagihan::where('bulan_tahun', 'LIKE', "$tahun-%")
-            ->where('status_pembayaran', 'lunas') // ambil yang status lunas aja
             ->get()
             ->groupBy('pelanggan_id');
 
