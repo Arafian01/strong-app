@@ -16,13 +16,35 @@ class PembayaranController extends Controller
     public function index()
     {
         try {
-            $pembayaran = pembayaran::paginate(5);
-            $user = User::all();
-            $paket = Paket::all();
-            $pelanggan = Pelanggan::all();
-            $tagihan = tagihan::all();
+            $search = request('search');
+            $entries = request('entries', 10);
 
-            return view('admin.page.pembayaran.index', compact('pembayaran', 'user', 'paket', 'pelanggan', 'tagihan'));
+            // Cari pelanggan berdasarkan user yang login
+            $pelanggan = Pelanggan::where('user_id', Auth::id())->first();
+
+            // Ambil pembayaran yang hanya milik pelanggan login
+            $pembayaran = Pembayaran::with(['tagihan', 'tagihan.pelanggan'])
+                ->whereHas('tagihan.pelanggan', function ($query) use ($pelanggan) {
+                    $query->where('id', $pelanggan->id);
+                })
+                ->when($search, function ($query) use ($search) {
+                    $query->where(function ($q) use ($search) {
+                        $q->where('metode_pembayaran', 'like', "%$search%")
+                            ->orWhere('status', 'like', "%$search%")
+                            ->orWhere('keterangan', 'like', "%$search%");
+                    });
+                })
+                ->paginate($entries);
+
+            return view('users.page.pembayaran.index', [
+                'pembayaran' => $pembayaran,
+                'search' => $search,
+                'entries' => $entries,
+                'pelanggan' => $pelanggan,
+                'user' => User::all(),
+                'paket' => Paket::all(),
+                'tagihan' => Tagihan::all(),
+            ]);
         } catch (\Exception $e) {
             return redirect()->route('error.index')->with('error_message', 'Error: ' . $e->getMessage());
         }
