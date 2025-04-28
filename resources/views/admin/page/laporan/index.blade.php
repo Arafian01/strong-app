@@ -22,15 +22,17 @@
                             <div class="flex gap-5 my-5">
                                 <div class="mb-5 w-full">
                                     <label for="bulan_tahun"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Bulan Tahun</label>
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Bulan
+                                        Tahun</label>
                                     <input type="year" id="bulan_tahun" name="bulan_tahun"
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                        />
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                                 </div>
                             </div>
                             <div class="flex gap-3">
-                                <button type="submit" class=" bg-emerald-200 hover:bg-emerald-400 focus:ring-4 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm w-full sm:w-auto px-12 py-2.5 text-center dark:bg-emerald-200 dark:hover:bg-emerald-300 dark:focus:ring-emerald-300">Print</button>
-                                <button type="reset" class="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-12 py-2.5 text-center dark:bg-red-00 dark:hover:bg-red-500 dark:focus:ring-red-500">Batal</button>
+                                <button type="submit"
+                                    class=" bg-emerald-200 hover:bg-emerald-400 focus:ring-4 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm w-full sm:w-auto px-12 py-2.5 text-center dark:bg-emerald-200 dark:hover:bg-emerald-300 dark:focus:ring-emerald-300">Print</button>
+                                <button type="reset"
+                                    class="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-12 py-2.5 text-center dark:bg-red-00 dark:hover:bg-red-500 dark:focus:ring-red-500">Batal</button>
                             </div>
                         </form>
                     </div>
@@ -38,4 +40,10 @@
             </div>
         </div>
     </div>
+    <script>
+        document.getElementById('tanggal').addEventListener('change', function() {
+            const tahun = new Date(this.value).getFullYear();
+            console.log('Tahun yang dipilih:', tahun);
+        });
+    </script>
 </x-app-layout>
