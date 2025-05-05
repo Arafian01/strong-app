@@ -160,7 +160,7 @@
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden bg-white/95 backdrop-blur-sm">
         <div class="pt-2 pb-3 space-y-1">
             @can('role-admin')
-                <x-responsive-nav-link :href="route('dashboardAdmin')" :active="request()->routeIs('dashboardAdmin')" class="px-4">
+                <x-responsive-nav-link :href="route('dashboardAdmin.index')" :active="request()->routeIs('dashboardAdmin.index')" class="px-4">
                     {{ __('Dashboard') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('paket.index')" :active="request()->routeIs('paket.index')" class="px-4">
