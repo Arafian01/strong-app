@@ -68,14 +68,14 @@
 
             <!-- Search & Entries -->
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
-                <form method="GET" action="{{ route('pembayaran.index') }}" class="flex w-full sm:w-auto gap-2">
+                <form method="GET" action="{{ route('pembayaranAdmin.index') }}" class="flex w-full sm:w-auto gap-2">
                     <input type="text" name="search" value="{{ request('search') }}"
                         placeholder="Cari nama/bulan..."
                         class="w-full sm:w-64 px-4 py-2 rounded-lg border border-gray-200 focus:border-red-500 focus:ring-red-500" />
                     <button type="submit"
                         class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">Cari</button>
                 </form>
-                <form method="GET" action="{{ route('pembayaran.index') }}" class="flex items-center space-x-2">
+                <form method="GET" action="{{ route('pembayaranAdmin.index') }}" class="flex items-center space-x-2">
                     <input type="hidden" name="search" value="{{ request('search') }}">
                     <label for="entries" class="text-sm">Tampilkan:</label>
                     <select name="entries" onchange="this.form.submit()"
@@ -206,7 +206,7 @@
                         <button onclick="toggleModal('createModal')"
                             class="text-red-500 hover:text-red-700 text-2xl p-2">✕</button>
                     </div>
-                    <form id="createForm" action="{{ route('pembayaran.store') }}" method="POST"
+                    <form id="createForm" action="{{ route('pembayaranAdmin.store') }}" method="POST"
                         enctype="multipart/form-data" class="flex-1 flex flex-col overflow-hidden">
                         @csrf
                         <div class="flex-1 overflow-y-auto p-6 space-y-4 modal-scroll">
@@ -443,7 +443,7 @@
         function openEditModal(pembayaran) {
             const form = document.getElementById('editForm');
             // Set form action
-            form.setAttribute('action', `/pembayaran/${pembayaran.id}`);
+            form.setAttribute('action', `/pembayaranAdmin/${pembayaran.id}`);
             // Populate values
 
             console.log(pembayaran.tagihan_id);
@@ -473,7 +473,7 @@
             if (!result.isConfirmed) return;
 
             try {
-                const response = await fetch(`/pembayaran/${id}`, {
+                const response = await fetch(`/pembayaranAdmin/${id}`, {
                     method: 'DELETE', // langsung pakai DELETE jika rutenya Route::delete
                     headers: {
                         'Content-Type': 'application/json',
