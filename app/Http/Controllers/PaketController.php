@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\paket;
+use App\Models\pakets;
 use Illuminate\Http\Request;
 
 class PaketController extends Controller
@@ -13,7 +13,7 @@ class PaketController extends Controller
             $search = request('search');
             $entries = request('entries', 5);
     
-            $paket = Paket::when($search, function($query) use ($search) {
+            $paket = pakets::when($search, function($query) use ($search) {
                 $query->where('nama_paket', 'like', "%$search%")
                       ->orWhere('deskripsi', 'like', "%$search%")
                       ->orWhere('harga', 'like', "%$search%");
@@ -43,7 +43,7 @@ class PaketController extends Controller
     
             ];
     
-            paket::create($data);
+            pakets::create($data);
     
             return redirect()
             ->route('paket.index')->with('message_insert', 'Data Paket Sudah ditambahkan ');
@@ -62,7 +62,7 @@ class PaketController extends Controller
                 'deskripsi' => $request->input('deskripsi'),
             ];
     
-            $datas = paket::findOrFail($id);
+            $datas = pakets::findOrFail($id);
             $datas->update($data);
             return redirect()
             ->route('paket.index')->with('message_insert', 'Data Paket Berhasil diPerbarui ');
@@ -75,7 +75,7 @@ class PaketController extends Controller
     public function destroy($id)
     {   
         try {
-            $data = paket::findOrFail($id);
+            $data = pakets::findOrFail($id);
             $data->delete();
             return back()->with('message_delete', 'Data Paket Berhasil DiHapus ');
         } catch(\Exception $e){
