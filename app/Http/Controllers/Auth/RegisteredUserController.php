@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Paket;
-use App\Models\Pelanggan;
+use App\Models\pakets;
+use App\Models\pelanggans;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -22,7 +22,7 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        $pakets = Paket::all();
+        $pakets = pakets::all();
         return view('auth.register')->with('paket', $pakets);
     }
 
@@ -43,7 +43,7 @@ class RegisteredUserController extends Controller
                 'role' => 'pelanggan',
             ]);
     
-            Pelanggan::create([
+            pelanggans::create([
                 'user_id' => $user->id,
                 'paket_id' => $request->paket_id,
                 'telepon' => $request->telepon,
