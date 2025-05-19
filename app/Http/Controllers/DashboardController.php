@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Pelanggan;
-use App\Models\Tagihan;
+use App\Models\pelanggans;
+use App\Models\tagihans;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -19,19 +19,19 @@ class DashboardController extends Controller
         $currentMonthYear = Carbon::now()->format('m-Y');
 
         // 1. Jumlah pelanggan berdasarkan status
-        $jumlahPelanggan = Pelanggan::select('status', DB::raw('count(*) as total'))
+        $jumlahPelanggan = pelanggans::select('status', DB::raw('count(*) as total'))
             ->groupBy('status')
             ->pluck('total', 'status');
 
         // 2. Jumlah tagihan bulan ini berdasarkan status pembayaran
-        $jumlahTagihan = Tagihan::whereYear('jatuh_tempo', $currentYear)
+        $jumlahTagihan = tagihans::whereYear('jatuh_tempo', $currentYear)
             ->whereMonth('jatuh_tempo', $currentMonth)
             ->select('status_pembayaran', DB::raw('count(*) as total'))
             ->groupBy('status_pembayaran')
             ->pluck('total', 'status_pembayaran');
 
         // 3. Jumlah penghasilan bulan ini (dari tagihan yang lunas)
-        $totalPenghasilan = Tagihan::whereYear('jatuh_tempo', $currentYear)
+        $totalPenghasilan = tagihans::whereYear('jatuh_tempo', $currentYear)
             ->whereMonth('jatuh_tempo', $currentMonth)
             ->where('status_pembayaran', 'lunas')
             ->with('pelanggan.paket')
