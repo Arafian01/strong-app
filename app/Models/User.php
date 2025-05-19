@@ -49,16 +49,16 @@ class User extends Authenticatable
     }
 
     public function statusBacas() {
-        return $this->hasMany(Status_baca::class);
+        return $this->hasMany(status_bacas::class);
     }
 
     public function pelanggan()
     {
-        return $this->hasMany(pelanggan::class);
+        return $this->hasMany(pelanggans::class);
     }
 
     public function pembayaran()
     {
-        return $this->hasMany(pembayaran::class);
+        return $this->hasMany(pembayarans::class);
     }
 }
