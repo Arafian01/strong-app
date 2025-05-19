@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Paket;
-use App\Models\pelanggan;
+use App\Models\pakets;
+use App\Models\pelanggans;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -15,7 +15,7 @@ class PelangganController extends Controller
             $search = request('search');
             $entries = request('entries', 10);
 
-            $pelanggan = Pelanggan::with(['user', 'paket'])
+            $pelanggan = pelanggans::with(['user', 'paket'])
                 ->when($search, function ($query) use ($search) {
                     $query->where(function ($q) use ($search) {
                         $q->whereHas('user', function ($subQuery) use ($search) {
@@ -31,7 +31,7 @@ class PelangganController extends Controller
 
             return view('admin.page.pelanggan.index', [
                 'pelanggan' => $pelanggan,
-                'paket' => Paket::all(),
+                'paket' => pakets::all(),
                 'search' => $search,
                 'entries' => $entries
             ]);
@@ -62,7 +62,7 @@ class PelangganController extends Controller
                 $tanggal_aktif = null;
             }
 
-            Pelanggan::create([
+            pelanggans::create([
                 'user_id' => $datauser->id,
                 'paket_id' => $request->input('paket_id'),
                 'alamat' => $request->input('alamat'),
@@ -83,7 +83,7 @@ class PelangganController extends Controller
     {
 
         // try {
-            $pelanggan = Pelanggan::findOrFail($id);
+            $pelanggan = pelanggans::findOrFail($id);
 
             $status = $request->input('status');
             $tanggal_aktif = null;
@@ -132,7 +132,7 @@ class PelangganController extends Controller
     public function destroy($id)
     {
         try {
-            $data = pelanggan::findOrFail($id);
+            $data = pelanggans::findOrFail($id);
             $datauser = User::findOrFail($data->user_id);
             $datauser->delete();
             $data->delete();
