@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
-use App\Models\Pelanggan;
+use App\Models\pelanggans;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -41,7 +41,7 @@ class AuthenticatedSessionController extends Controller
 
         // Jika user adalah pelanggan, cek statusnya
         if ($user->role === 'pelanggan') {
-            $pelanggan = Pelanggan::where('user_id', $user->id)->first();
+            $pelanggan = pelanggans::where('user_id', $user->id)->first();
 
             if ($pelanggan && $pelanggan->status === 'nonaktif') {
                 Auth::logout(); // Logout user
