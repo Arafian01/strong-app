@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Paket;
-use App\Models\Pelanggan;
-use App\Models\pembayaran;
-use App\Models\tagihan;
+use App\Models\pakets;
+use App\Models\pelanggans;
+use App\Models\pembayarans;
+use App\Models\tagihans;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,35 +16,13 @@ class PembayaranController extends Controller
     public function index()
     {
         try {
-            $search = request('search');
-            $entries = request('entries', 10);
+            $pembayaran = pembayarans::paginate(5);
+            $user = User::all();
+            $paket = pakets::all();
+            $pelanggan = pelanggans::all();
+            $tagihan = tagihans::all();
 
-            // Cari pelanggan berdasarkan user yang login
-            $pelanggan = Pelanggan::where('user_id', Auth::id())->first();
-
-            // Ambil pembayaran yang hanya milik pelanggan login
-            $pembayaran = Pembayaran::with(['tagihan', 'tagihan.pelanggan'])
-                ->whereHas('tagihan.pelanggan', function ($query) use ($pelanggan) {
-                    $query->where('id', $pelanggan->id);
-                })
-                ->when($search, function ($query) use ($search) {
-                    $query->where(function ($q) use ($search) {
-                        $q->where('metode_pembayaran', 'like', "%$search%")
-                            ->orWhere('status', 'like', "%$search%")
-                            ->orWhere('keterangan', 'like', "%$search%");
-                    });
-                })
-                ->paginate($entries);
-
-            return view('users.page.pembayaran.index', [
-                'pembayaran' => $pembayaran,
-                'search' => $search,
-                'entries' => $entries,
-                'pelanggan' => $pelanggan,
-                'user' => User::all(),
-                'paket' => Paket::all(),
-                'tagihan' => Tagihan::all(),
-            ]);
+            return view('admin.page.pembayaran.index', compact('pembayaran', 'user', 'paket', 'pelanggan', 'tagihan'));
         } catch (\Exception $e) {
             return redirect()->route('error.index')->with('error_message', 'Error: ' . $e->getMessage());
         }
@@ -81,9 +59,9 @@ class PembayaranController extends Controller
             'tanggal_verifikasi' => $tanggal,
         ];
 
-        pembayaran::create($data);
+        pembayarans::create($data);
 
-        $tagihan = tagihan::findOrFail($request->input('tagihan_id'));
+        $tagihan = tagihans::findOrFail($request->input('tagihan_id'));
         $status = null;
         if ($request->input('status_verifikasi') == 'diterima') {
             $status = 'lunas';
@@ -105,7 +83,7 @@ class PembayaranController extends Controller
     public function update(Request $request, String $id)
     {
         try {
-            $pembayaran = pembayaran::findOrFail($id);
+            $pembayaran = pembayarans::findOrFail($id);
 
             if ($request->hasFile('image')) {
                 // Hapus gambar lama jika ada
@@ -131,7 +109,7 @@ class PembayaranController extends Controller
                 'tanggal_verifikasi' => now(),
             ]);
 
-            $tagihan = tagihan::findOrFail($request->input('tagihan_id'));
+            $tagihan = tagihans::findOrFail($request->input('tagihan_id'));
             $status = null;
             if ($request->input('status_verifikasi') == 'diterima') {
                 $status = 'lunas';
@@ -150,8 +128,8 @@ class PembayaranController extends Controller
     }
     public function destroy($id)
     {
-        $pembayaran = Pembayaran::findOrFail($id);
-        $tagihan   = Tagihan::findOrFail($pembayaran->tagihan_id);
+        $pembayaran = pembayarans::findOrFail($id);
+        $tagihan   = tagihans::findOrFail($pembayaran->tagihan_id);
 
         if ($tagihan->status_pembayaran === 'lunas') {
             // Kembalikan error JSON dengan status 400
