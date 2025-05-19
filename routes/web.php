@@ -8,6 +8,7 @@ use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\PaketController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\PembayaranController;
+use App\Http\Controllers\pembayaranUserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TagihanController;
 use App\Http\Controllers\tagihanUserController;
@@ -32,7 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/notifikasi/baca/{id}', [NotifikasiController::class, 'baca'])->name('notifikasi.baca');
     Route::put('/notifikasi/{id}', [NotifikasiController::class, 'update'])->name('notifikasi.update');
     Route::delete('/notifikasi/{id}', [NotifikasiController::class, 'destroy'])->name('notifikasi.destroy');
-    Route::resource('pembayaran', PembayaranController::class)->middleware(['auth']);
+    Route::resource('pembayaran', pembayaranUserController::class)->middleware(['auth']);
     Route::resource('tagihan', tagihanUserController::class)->middleware(['auth']);
 });
 Route::resource('error', ErrorController::class);
