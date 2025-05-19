@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Notifikasi;
-use App\Models\Status_baca;
+use App\Models\notifikasis;
+use App\Models\status_bacas;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,17 +14,17 @@ class NotifikasiController extends Controller
     {
         try {
             $user = Auth::user();
-            $notifikasis = Notifikasi::latest()->get();
+            $notifikasis = notifikasis::latest()->get();
 
             // Ambil ID notifikasi yang sudah dibaca oleh user
-            $dibaca = Status_baca::where('user_id', $user->id)
+            $dibaca = status_bacas::where('user_id', $user->id)
                 ->pluck('notifikasi_id')
                 ->toArray();
 
             // Tandai sebagai terbaca jika belum ada di status baca
             foreach ($notifikasis as $notifikasi) {
                 if (!in_array($notifikasi->id, $dibaca)) {
-                    Status_baca::firstOrCreate([
+                    status_bacas::firstOrCreate([
                         'notifikasi_id' => $notifikasi->id,
                         'user_id' => $user->id
                     ]);
@@ -46,7 +46,7 @@ class NotifikasiController extends Controller
                 'pesan' => 'required|string',
             ]);
 
-            Notifikasi::create($request->all());
+            notifikasis::create($request->all());
 
             return redirect()
                 ->route('notifikasi.index')
@@ -71,7 +71,7 @@ class NotifikasiController extends Controller
                 'pesan' => 'required|string',
             ]);
 
-            $notifikasi = Notifikasi::findOrFail($id);
+            $notifikasi = notifikasis::findOrFail($id);
             $notifikasi->update([
                 'judul' => $request->judul,
                 'pesan' => $request->pesan,
@@ -94,7 +94,7 @@ class NotifikasiController extends Controller
     public function destroy($id)
     {
         try {
-            $notifikasi = Notifikasi::findOrFail($id);
+            $notifikasi = notifikasis::findOrFail($id);
             $notifikasi->delete();
 
             return back()
