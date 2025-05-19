@@ -68,7 +68,7 @@
 
             <!-- Search & Entries -->
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
-                <form method="GET" action="{{ route('tagihan.index') }}" class="flex w-full sm:w-auto gap-2">
+                <form method="GET" action="{{ route('tagihanAdmin.index') }}" class="flex w-full sm:w-auto gap-2">
                     <input type="text" name="search" value="{{ request('search') }}"
                         placeholder="Cari nama/email/alamat..."
                         class="w-full sm:w-64 px-4 py-2 rounded-lg border border-gray-200 focus:border-red-500 focus:ring-red-500" />
@@ -76,7 +76,7 @@
                         class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">Cari</button>
                 </form>
 
-                <form method="GET" action="{{ route('tagihan.index') }}" class="flex items-center space-x-2">
+                <form method="GET" action="{{ route('tagihanAdmin.index') }}" class="flex items-center space-x-2">
                     <input type="hidden" name="search" value="{{ request('search') }}">
                     <label for="entries" class="text-sm">Tampilkan:</label>
                     <select name="entries" onchange="this.form.submit()"
@@ -198,7 +198,7 @@
                         <button onclick="toggleModal('createModal')"
                             class="text-red-500 hover:text-red-700 text-2xl p-2">✕</button>
                     </div>
-                    <form action="{{ route('tagihan.store') }}" method="post"
+                    <form action="{{ route('tagihanAdmin.store') }}" method="post"
                         class="flex-1 flex flex-col overflow-hidden">
                         @csrf
                         <div class="flex-1 overflow-y-auto p-6 space-y-4 modal-scroll">
@@ -362,7 +362,7 @@
                 form.elements['jatuh_tempo'].value = tagihan.jatuh_tempo;
 
                 // Update action URL
-                form.setAttribute('action', `/tagihan/${tagihan.id}`);
+                form.setAttribute('action', `/tagihanAdmin/${tagihan.id}`);
 
                 // Show modal
                 modal.classList.remove('hidden');
@@ -383,7 +383,7 @@
                 if (!result.isConfirmed) return;
 
                 try {
-                    await fetch(`/tagihan/${id}`, {
+                    await fetch(`/tagihanAdmin/${id}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
