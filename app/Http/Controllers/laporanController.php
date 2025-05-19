@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\pelanggan;
-use App\Models\tagihan;
+use App\Models\pelanggans;
+use App\Models\tagihans;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -17,9 +17,9 @@ class laporanController extends Controller
     {
         $tahun = $request->input('bulan_tahun');
 
-        $pelanggan = Pelanggan::with('user')->get();
+        $pelanggan = pelanggans::with('user')->get();
 
-        $tagihan = Tagihan::where('bulan_tahun', 'LIKE', "$tahun-%")
+        $tagihan = tagihans::where('bulan_tahun', 'LIKE', "$tahun-%")
             ->get()
             ->groupBy('pelanggan_id');
 
