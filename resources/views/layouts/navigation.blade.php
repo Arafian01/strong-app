@@ -1,13 +1,13 @@
 <nav x-data="{ open: false }" class="bg-white/80 backdrop-blur-lg border-b border-gray-200 shadow-sm">
     <!-- Primary Navigation Menu -->
     @php
-        use App\Models\Notifikasi;
-        use App\Models\Status_baca;
+        use App\Models\notifikasis;
+        use App\Models\status_bacas;
 
         $user = Auth::user();
-        $notifikasiBaru = Notifikasi::whereNotIn(
+        $notifikasiBaru = notifikasis::whereNotIn(
             'id',
-            Status_baca::where('user_id', $user->id)->pluck('notifikasi_id'),
+            status_bacas::where('user_id', $user->id)->pluck('notifikasi_id'),
         )->count();
     @endphp
 
