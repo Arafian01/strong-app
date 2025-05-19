@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\pelanggan;
-use App\Models\tagihan;
+use App\Models\pelanggans;
+use App\Models\tagihans;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -23,7 +23,7 @@ class TagihanController extends Controller
             // ]);
             $search = request('search');
             $entries = request('entries', 10);
-            $tagihan = tagihan::with(['pelanggan', 'pelanggan.user'])
+            $tagihan = tagihans::with(['pelanggan', 'pelanggan.user'])
                 ->when($search, function ($query) use ($search) {
                     $query->where(function ($q) use ($search) {
                         $q->whereHas('pelanggan.user', function ($subQuery) use ($search) {
@@ -39,7 +39,7 @@ class TagihanController extends Controller
                 'tagihan' => $tagihan,
                 'search' => $search,
                 'entries' => $entries,
-                'pelanggan' => Pelanggan::all(),
+                'pelanggan' => pelanggans::all(),
                 'user' => User::all()
             ]);
         } catch (\Exception $e) {
@@ -57,7 +57,7 @@ class TagihanController extends Controller
                 'jatuh_tempo' => $request->input('jatuh_tempo'),
             ];
 
-            tagihan::create($data);
+            tagihans::create($data);
 
             return back()->with('message_insert', 'Data Tagihan Sudah dihapus');
         } catch (\Exception $e) {
@@ -75,7 +75,7 @@ class TagihanController extends Controller
                 'jatuh_tempo' => $request->input('jatuh_tempo'),
             ];
 
-            $datas = tagihan::findOrFail($id);
+            $datas = tagihans::findOrFail($id);
             $datas->update($data);
             return back()->with('message_insert', 'Data Tagihan Sudah dihapus');
         } catch (\Exception $e) {
@@ -86,7 +86,7 @@ class TagihanController extends Controller
     public function destroy($id)
     {
         try {
-            $data = tagihan::findOrFail($id);
+            $data = tagihans::findOrFail($id);
             $data->delete();
             return back()->with('message_insert', 'Data Tagihan Sudah dihapus');
         } catch (\Exception $e) {
