@@ -15,6 +15,18 @@
         .modal-scroll::-webkit-scrollbar-thumb:hover {
             background: #999;
         }
+        /* Ensure modal is centered and scrollable */
+        .modal-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        .modal-content {
+            max-height: calc(100vh - 2rem);
+            overflow-y: auto;
+        }
     </style>
     <x-slot name="header md:flex">
         <div class="flex items-center justify-between">
@@ -89,6 +101,7 @@
                                 <tr class="text-gray-700">
                                     <th class="px-4 py-3 text-center">No</th>
                                     <th class="px-4 py-3">Bulan Tahun</th>
+                                    <th class="px-4 py-3">Harga</th>
                                     <th class="px-4 py-3">Status Pembayaran</th>
                                     <th class="px-4 py-3">Jatuh Tempo</th>
                                     <th class="px-4 py-3">Aksi</th>
@@ -99,13 +112,14 @@
                                     <tr class="hover:bg-gray-50 transition-colors">
                                         <td class="px-4 py-3 text-center">{{ $tagihan->firstItem() + $key }}</td>
                                         <td class="px-4 py-3 text-center">{{ date('F Y', strtotime($t->bulan_tahun)) }}</td>
+                                        <td class="px-4 py-3 text-center">Rp {{ number_format($t->pelanggan->paket->harga, 0, ',', '.') }}</td>
                                         <td class="px-4 py-3 text-center">
                                             {{ ucfirst(str_replace('_', ' ', $t->status_pembayaran)) }}
                                         </td>
                                         <td class="px-4 py-3 text-center">{{ $t->jatuh_tempo }}</td>
                                         <td class="px-4 py-3 text-center">
                                             @if ($t->status_pembayaran == 'belum_dibayar')
-                                                <button onclick="toggleModal('createModal', {{ $t->id }}, '{{ date('F Y', strtotime($t->bulan_tahun)) }}')"
+                                                <button onclick="toggleModal('createModal', {{ $t->id }}, '{{ date('F Y', strtotime($t->bulan_tahun)) }}', '{{ $t->pelanggan->paket->harga }}')"
                                                     class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
                                                     Bayar
                                                 </button>
@@ -123,8 +137,8 @@
 
                 <!-- Create Modal -->
                 <div id="createModal" class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm">
-                    <div class="fixed inset-0 flex items-center justify-center p-4">
-                        <div class="w-full max-w-2xl max-h-[calc(100vh-4rem)] bg-white rounded-2xl shadow-xl flex flex-col">
+                    <div class="modal-container">
+                        <div class="w-full max-w-2xl bg-white rounded-2xl shadow-xl flex flex-col modal-content">
                             <!-- Header -->
                             <div class="p-6 border-b bg-red-50 rounded-t-2xl flex justify-between items-center">
                                 <div>
@@ -139,6 +153,14 @@
                                 @csrf
                                 <input type="hidden" name="tagihan_id" id="tagihan_id">
                                 <div class="flex-1 overflow-y-auto p-6 space-y-4 modal-scroll">
+                                    <!-- Harga -->
+                                    <div class="space-y-2">
+                                        <label class="block text-sm font-medium text-gray-700">
+                                            Harga <span class="text-red-500">*</span>
+                                        </label>
+                                        <input type="text" id="harga" readonly
+                                            class="w-full p-2 rounded-lg border border-gray-200 bg-gray-100 text-gray-700" />
+                                    </div>
                                     <!-- Upload Bukti -->
                                     <div class="space-y-2">
                                         <label class="block text-sm font-medium text-gray-700">
@@ -170,7 +192,7 @@
                                     </div>
                                 </div>
                                 <!-- Footer -->
-                                <div class="p-6 border-t bg-gray-50 rounded-b-2xl flex justify-end space-x-3">
+                                <div class="p-6 border-t bg-gray-50 rounded-b-2xl flex justify-end space-x gaflex justify-end space-x-3">
                                     <button type="button" onclick="toggleModal('createModal')"
                                         class="px-6 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Batal</button>
                                     <button type="submit"
@@ -200,11 +222,12 @@
                                 </span>
                             </div>
                             <div class="mt-2 grid grid-cols-2 gap-2 text-xs text-gray-700">
+                                <div><span class="font-medium">Harga:</span> Rp {{ number_format($t->pelanggan->paket->harga, 0, ',', '.') }}</div>
                                 <div><span class="font-medium">Jatuh Tempo:</span> {{ $t->jatuh_tempo }}</div>
                             </div>
                             @if ($t->status_pembayaran == 'belum_dibayar')
                                 <div class="mt-2">
-                                    <button onclick="toggleModal('createModal', {{ $t->id }}, '{{ date('F Y', strtotime($t->bulan_tahun)) }}')"
+                                    <button onclick="toggleModal('createModal', {{ $t->id }}, '{{ date('F Y', strtotime($t->bulan_tahun)) }}', '{{ $t->pelanggan->paket->harga }}')"
                                         class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
                                         Bayar
                                     </button>
@@ -221,17 +244,21 @@
 
         <!-- JavaScript for Modal and Image Preview -->
         <script>
-            function toggleModal(modalId, tagihanId = null, bulanTahun = null) {
+            function toggleModal(modalId, tagihanId = null, bulanTahun = null, harga = null) {
                 const modal = document.getElementById(modalId);
                 modal.classList.toggle('hidden');
-                if (tagihanId && bulanTahun) {
+                if (tagihanId && bulanTahun && harga) {
                     const tagihanInput = document.getElementById('tagihan_id');
                     const modalTitle = document.getElementById('modal-title');
+                    const hargaInput = document.getElementById('harga');
                     if (tagihanInput) {
                         tagihanInput.value = tagihanId;
                     }
                     if (modalTitle) {
                         modalTitle.textContent = `Bayar Tagihan ${bulanTahun}`;
+                    }
+                    if (hargaInput) {
+                        hargaInput.value = `Rp ${parseInt(harga).toLocaleString('id-ID')}`;
                     }
                 }
             }
