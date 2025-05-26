@@ -11,7 +11,7 @@ class TagihanController extends Controller
 {
     public function index()
     {
-        try {
+        // try {
 
             // $tagihan = tagihan::paginate(5);
             // $user = User::all();
@@ -34,6 +34,13 @@ class TagihanController extends Controller
                             ->orWhere('jatuh_tempo', 'like', "%$search%");
                     });
                 })
+                ->orderByRaw("CASE status_pembayaran 
+                WHEN 'belum_dibayar' THEN 1 
+                WHEN 'menunggu_verifikasi' THEN 2 
+                WHEN 'lunas' THEN 3 
+                WHEN 'ditolak' THEN 4 
+                ELSE 5 END")
+            ->orderBy('bulan_tahun', 'desc')
                 ->paginate($entries);
             return view('admin.page.tagihan.index', [
                 'tagihan' => $tagihan,
@@ -42,9 +49,9 @@ class TagihanController extends Controller
                 'pelanggan' => pelanggans::all(),
                 'user' => User::all()
             ]);
-        } catch (\Exception $e) {
-            return redirect()->route('error.index')->with('error_message', 'Error: ' . $e->getMessage());
-        }
+        // } catch (\Exception $e) {
+        //     return redirect()->route('error.index')->with('error_message', 'Error: ' . $e->getMessage());
+        // }
     }
 
     public function store(Request $request)
