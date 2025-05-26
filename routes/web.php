@@ -49,4 +49,5 @@ Route::resource('laporan', laporanController::class)->middleware(['auth', RoleMi
 
 
 
+
 require __DIR__ . '/auth.php';
