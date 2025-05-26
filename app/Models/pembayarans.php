@@ -22,7 +22,7 @@ class pembayarans extends Model
 
     public function tagihan()
     {
-        return $this->belongsTo(tagihans::class);
+        return $this->belongsTo(tagihans::class, 'tagihan_id');
     }
 
     public function user()
