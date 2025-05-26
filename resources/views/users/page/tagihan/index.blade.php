@@ -28,7 +28,7 @@
             overflow-y: auto;
         }
     </style>
-    <x-slot name="header md:flex">
+    <x-slot name="header">
         <div class="flex items-center justify-between">
             <h2 class="text-2xl font-bold text-gray-800">
                 <span class="bg-gradient-to-r from-red-600 to-orange-500 bg-clip-text text-transparent">
