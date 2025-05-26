@@ -33,6 +33,7 @@ class pembayaranUserController extends Controller
                             ->orWhere('keterangan', 'like', "%$search%");
                     });
                 })
+                ->orderBy('tagihan_id', 'desc')
                 ->paginate($entries);
 
             return view('users.page.pembayaran.index', [
@@ -47,40 +48,39 @@ class pembayaranUserController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('error.index')->with('error_message', 'Error: ' . $e->getMessage());
         }
-            
     }
 
     public function store(Request $request)
     {
+        try {
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('pembayaran_images'), $imageName);
+            } else {
+                $imageName = null;
+            };
 
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('pembayaran_images'), $imageName);
-        } else {
-            $imageName = null;
-        };
 
+            $data = [
+                'user_id' => Auth::user()->id,
+                'tagihan_id' => $request->input('tagihan_id'),
+                'image' => $imageName,
+                'tanggal_kirim' => now(),
+                'status_verifikasi' => "menunggu verifikasi",
+            ];
 
-        $data = [
-            'user_id' => Auth::user()->id,
-            'tagihan_id' => $request->input('tagihan_id'),
-            'image' => $imageName,
-            'tanggal_kirim' => now(),
-            'status_verifikasi' => "menunggu verifikasi",
-        ];
+            pembayarans::create($data);
 
-        pembayarans::create($data);
+            $tagihan = tagihans::findOrFail($request->input('tagihan_id'));
 
-        $tagihan = tagihans::findOrFail($request->input('tagihan_id'));
+            $tagihan->update([
+                'status_pembayaran' => "menunggu_verifikasi",
+            ]);
 
-        $tagihan->update([
-            'status_pembayaran' => "menunggu_verifikasi",
-        ]);
-
-        return back()->with('message_success', 'Data pembayaran Berhasil Ditambahkan');
-        // } catch (\Exception $e) {
-        //     return redirect()->route('error.index')->with('error_message', 'Error: ' . $e->getMessage());
-        // }
+            return back()->with('message_success', 'Data pembayaran Berhasil Ditambahkan');
+        } catch (\Exception $e) {
+            return redirect()->route('error.index')->with('error_message', 'Error: ' . $e->getMessage());
+        }
     }
 }
