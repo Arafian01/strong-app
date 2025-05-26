@@ -12,23 +12,25 @@ class tagihanUserController extends Controller
 {
     public function index()
     {
-        // Logic to fetch and display the user's bills
         $search = request('search');
         $entries = request('entries', 10);
         $pelanggan = pelanggans::where('user_id', Auth::id())->first();
+
         $tagihan = tagihans::with(['pelanggan', 'pelanggan.user'])
-        ->where('pelanggan_id', $pelanggan->id) // Tambahkan ini untuk filter tagihan pelanggan user login
-        ->when($search, function ($query) use ($search) {
-            $query->where(function ($q) use ($search) {
-                $q->whereHas('pelanggan.user', function ($subQuery) use ($search) {
-                    $subQuery->where('name', 'like', "%$search%");
-                })
-                ->orWhere('bulan_tahun', 'like', "%$search%")
-                ->orWhere('status_pembayaran', 'like', "%$search%")
-                ->orWhere('jatuh_tempo', 'like', "%$search%");
-            });
-        })
-        ->paginate($entries);
+            ->where('pelanggan_id', $pelanggan ? $pelanggan->id : 0) // Fallback if pelanggan is null
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($query) use ($search) {
+                    $query->whereHas('pelanggan.user', function ($subQuery) use ($search) {
+                        $subQuery->where('name', 'like', "%$search%");
+                    })
+                    ->orWhere('bulan_tahun', 'like', "%$search%")
+                    ->orWhere('status_pembayaran', 'like', "%$search%")
+                    ->orWhere('jatuh_tempo', 'like', "%$search%");
+                });
+            })
+            ->orderBy('bulan_tahun', 'desc')
+            ->paginate($entries);
+
         return view('users.page.tagihan.index', [
             'tagihan' => $tagihan,
             'search' => $search,
