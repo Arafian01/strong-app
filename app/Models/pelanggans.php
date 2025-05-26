@@ -24,16 +24,15 @@ class pelanggans extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function paket()
     {
-        return $this->belongsTo(pakets::class);
+        return $this->belongsTo(pakets::class, 'paket_id');
     }
-
-    public function tagihan()
+    public function tagihans()
     {
-        return $this->hasMany(tagihans::class);
+        return $this->hasMany(tagihans::class, 'pelanggan_id');
     }
 }
