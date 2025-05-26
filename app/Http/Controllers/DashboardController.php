@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\pelanggans;
+use App\Models\pembayarans;
 use App\Models\tagihans;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
-
 
 class DashboardController extends Controller
 {
@@ -16,7 +16,6 @@ class DashboardController extends Controller
         // Sekarang bulan dan tahun
         $currentMonth = Carbon::now()->format('m');
         $currentYear = Carbon::now()->format('Y');
-        $currentMonthYear = Carbon::now()->format('m-Y');
 
         // 1. Jumlah pelanggan berdasarkan status
         $jumlahPelanggan = pelanggans::select('status', DB::raw('count(*) as total'))
@@ -37,7 +36,7 @@ class DashboardController extends Controller
             ->with('pelanggan.paket')
             ->get()
             ->sum(function ($tagihan) {
-                return $tagihan->pelanggan->paket->harga ?? 0;
+                return $tagihan->pelanggan && $tagihan->pelanggan->paket ? $tagihan->pelanggan->paket->harga : 0;
             });
 
         return view('admin.page.dashboard.index', [
@@ -47,4 +46,26 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function indexUser()
+    {
+        $pelanggan = pelanggans::where('user_id', auth()->id())->with('paket')->first();
+
+        $tagihan = $pelanggan
+            ? tagihans::where('pelanggan_id', $pelanggan->id)
+                ->with(['pelanggan.paket'])
+                ->where('status_pembayaran', 'belum_dibayar')
+                ->get()
+            : collect();
+
+        $pembayaran = pembayarans::where('user_id', auth()->id())
+            ->with(['tagihan.pelanggan.paket'])
+            ->latest()
+            ->take(5)
+            ->get();
+
+        $tagihanBelumDibayar = $tagihan->count();
+        $totalPembayaran = pembayarans::where('user_id', auth()->id())->count();
+
+        return view('dashboard', compact('tagihan', 'pembayaran', 'tagihanBelumDibayar', 'totalPembayaran', 'pelanggan'));
+    }
 }
