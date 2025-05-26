@@ -49,4 +49,38 @@ class pembayaranUserController extends Controller
         }
             
     }
+
+    public function store(Request $request)
+    {
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('pembayaran_images'), $imageName);
+        } else {
+            $imageName = null;
+        };
+
+
+        $data = [
+            'user_id' => Auth::user()->id,
+            'tagihan_id' => $request->input('tagihan_id'),
+            'image' => $imageName,
+            'tanggal_kirim' => now(),
+            'status_verifikasi' => "menunggu verifikasi",
+        ];
+
+        pembayarans::create($data);
+
+        $tagihan = tagihans::findOrFail($request->input('tagihan_id'));
+
+        $tagihan->update([
+            'status_pembayaran' => "menunggu_verifikasi",
+        ]);
+
+        return back()->with('message_success', 'Data pembayaran Berhasil Ditambahkan');
+        // } catch (\Exception $e) {
+        //     return redirect()->route('error.index')->with('error_message', 'Error: ' . $e->getMessage());
+        // }
+    }
 }
