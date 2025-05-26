@@ -20,12 +20,11 @@ class tagihans extends Model
 
     public function pelanggan()
     {
-        return $this->belongsTo(pelanggans::class);
+        return $this->belongsTo(pelanggans::class, 'pelanggan_id');
     }
-
-    public function pembayaran()
+    public function pembayarans()
     {
-        return $this->hasMany(pembayarans::class);
+        return $this->hasMany(pembayarans::class, 'tagihan_id');
     }
 
 }
