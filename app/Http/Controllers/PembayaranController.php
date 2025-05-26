@@ -30,57 +30,57 @@ class PembayaranController extends Controller
 
     public function store(Request $request)
     {
-        // try {
-        $tanggal = null;
-        if ($request->input('status_verifikasi') == 'diterima') {
-            $tanggal = now();
-        } elseif ($request->input('status_verifikasi') == 'ditolak') {
-            $tanggal = now();
-        } else {
+        try {
             $tanggal = null;
+            if ($request->input('status_verifikasi') == 'diterima') {
+                $tanggal = now();
+            } elseif ($request->input('status_verifikasi') == 'ditolak') {
+                $tanggal = now();
+            } else {
+                $tanggal = null;
+            }
+
+
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('pembayaran_images'), $imageName);
+            } else {
+                $imageName = null;
+            };
+
+
+            $data = [
+                'user_id' => Auth::user()->id,
+                'tagihan_id' => $request->input('tagihan_id'),
+                'image' => $imageName,
+                'tanggal_kirim' => $request->input('tanggal_kirim'),
+                'status_verifikasi' => $request->input('status_verifikasi'),
+                'tanggal_verifikasi' => $tanggal,
+            ];
+
+            pembayarans::create($data);
+
+            $tagihan = tagihans::findOrFail($request->input('tagihan_id'));
+            $status = null;
+            if ($request->input('status_verifikasi') == 'diterima') {
+                $status = 'lunas';
+            } elseif ($request->input('status_verifikasi') == 'ditolak') {
+                $status = 'belum_dibayar';
+            } elseif ($request->input('status_verifikasi') == 'menunggu verifikasi') {
+                $status = 'menunggu_verifikasi';
+            }
+
+            $tagihan->update([
+                'status_pembayaran' => $status,
+            ]);
+
+            return back()->with('message_success', 'Data pembayaran Berhasil Ditambahkan');
+        } catch (\Exception $e) {
+            return redirect()->route('error.index')->with('error_message', 'Error: ' . $e->getMessage());
         }
-
-
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('pembayaran_images'), $imageName);
-        } else {
-            $imageName = null;
-        };
-
-
-        $data = [
-            'user_id' => Auth::user()->id,
-            'tagihan_id' => $request->input('tagihan_id'),
-            'image' => $imageName,
-            'tanggal_kirim' => $request->input('tanggal_kirim'),
-            'status_verifikasi' => $request->input('status_verifikasi'),
-            'tanggal_verifikasi' => $tanggal,
-        ];
-
-        pembayarans::create($data);
-
-        $tagihan = tagihans::findOrFail($request->input('tagihan_id'));
-        $status = null;
-        if ($request->input('status_verifikasi') == 'diterima') {
-            $status = 'lunas';
-        } elseif ($request->input('status_verifikasi') == 'ditolak') {
-            $status = 'belum_dibayar';
-        } elseif ($request->input('status_verifikasi') == 'menunggu verifikasi') {
-            $status = 'menunggu_verifikasi';
-        }
-
-        $tagihan->update([
-            'status_pembayaran' => $status,
-        ]);
-
-        return back()->with('message_success', 'Data pembayaran Berhasil Ditambahkan');
-        // } catch (\Exception $e) {
-        //     return redirect()->route('error.index')->with('error_message', 'Error: ' . $e->getMessage());
-        // }
     }
-    
+
     public function update(Request $request, String $id)
     {
         try {
@@ -114,6 +114,8 @@ class PembayaranController extends Controller
             $status = null;
             if ($request->input('status_verifikasi') == 'diterima') {
                 $status = 'lunas';
+            } elseif ($request->input('status_verifikasi') == 'ditolak') {
+                $status = 'belum_dibayar';
             } else {
                 $status = 'menunggu_verifikasi';
             }
