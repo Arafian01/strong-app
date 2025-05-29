@@ -48,24 +48,28 @@ class DashboardController extends Controller
 
     public function indexUser()
     {
-        $pelanggan = pelanggans::where('user_id', auth()->id())->with('paket')->first();
+        try {
+            $pelanggan = pelanggans::where('user_id', auth()->id())->with('paket')->first();
 
-        $tagihan = $pelanggan
-            ? tagihans::where('pelanggan_id', $pelanggan->id)
+            $tagihan = $pelanggan
+                ? tagihans::where('pelanggan_id', $pelanggan->id)
                 ->with(['pelanggan.paket'])
                 ->where('status_pembayaran', 'belum_dibayar')
                 ->get()
-            : collect();
+                : collect();
 
-        $pembayaran = pembayarans::where('user_id', auth()->id())
-            ->with(['tagihan.pelanggan.paket'])
-            ->latest()
-            ->take(5)
-            ->get();
+            $pembayaran = pembayarans::where('user_id', auth()->id())
+                ->with(['tagihan.pelanggan.paket'])
+                ->latest()
+                ->take(5)
+                ->get();
 
-        $tagihanBelumDibayar = $tagihan->count();
-        $totalPembayaran = pembayarans::where('user_id', auth()->id())->count();
+            $tagihanBelumDibayar = $tagihan->count();
+            $totalPembayaran = pembayarans::where('user_id', auth()->id())->count();
 
-        return view('dashboard', compact('tagihan', 'pembayaran', 'tagihanBelumDibayar', 'totalPembayaran', 'pelanggan'));
+            return view('dashboard', compact('tagihan', 'pembayaran', 'tagihanBelumDibayar', 'totalPembayaran', 'pelanggan'));
+        } catch (\Exception $e) {
+            return redirect()->route('error.index')->with('error_message', 'Error: ' . $e->getMessage());
+        }
     }
 }
