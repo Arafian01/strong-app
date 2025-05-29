@@ -116,11 +116,11 @@
                                     <tr class="hover:bg-gray-50 transition-colors">
                                         <td class="px-4 py-3 text-center">{{ $tagihan->firstItem() + $key }}</td>
                                         <td class="px-4 py-3">{{ $t->pelanggan->user->name }}</td>
-                                        <td class="px-4 py-3">{{ date('F Y', strtotime($t->bulan_tahun)) }}</td>
-                                        <td class="px-4 py-3">
+                                        <td class="px-4 py-3 text-center">{{ date('F Y', strtotime($t->bulan_tahun)) }}</td>
+                                        <td class="px-4 py-3 text-center">
                                             {{ ucfirst(str_replace('_', ' ', $t->status_pembayaran)) }}
                                         </td>
-                                        <td class="px-4 py-3">{{ $t->jatuh_tempo }}</td>
+                                        <td class="px-4 py-3 text-center">{{ $t->jatuh_tempo }}</td>
                                         <td class="px-4 py-3 text-center space-x-1">
                                             <button onclick="openEditModal({{ json_encode($t) }})"
                                                 class="px-2 py-1 bg-yellow-100 text-yellow-600 rounded-md hover:bg-yellow-200 text-xs">
