@@ -518,6 +518,7 @@
             document.getElementById('edit_alamat').value = pelanggan.alamat;
             document.getElementById('edit_telepon').value = pelanggan.telepon;
             document.getElementById('edit_status').value = pelanggan.status;
+            document.getElementById('edit_tanggal').value = pelanggan.tanggal_langganan;
             // const tanggal = new Date(pelanggan.tanggal_langganan)
             //     .toISOString().split('T')[0];
             // document.getElementById('edit_tanggal').value = tanggal;
