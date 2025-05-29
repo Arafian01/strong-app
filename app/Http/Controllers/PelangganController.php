@@ -82,7 +82,7 @@ class PelangganController extends Controller
     public function update(Request $request, String $id)
     {
 
-        // try {
+        try {
             $pelanggan = pelanggans::findOrFail($id);
 
             $status = $request->input('status');
@@ -124,10 +124,10 @@ class PelangganController extends Controller
 
             return redirect()
                 ->route('pelanggan.index')->with('message_insert', 'Data pelanggan Berhasil diPerbarui ');
-        // } catch (\Exception $e) {
-        //     return redirect()
-        //         ->route('error.index')->with('error_message', 'terjadi kesalahan saat menambahkan data: ' . $e->getMessage());
-        // };
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('error.index')->with('error_message', 'terjadi kesalahan saat menambahkan data: ' . $e->getMessage());
+        };
     }
     public function destroy($id)
     {
