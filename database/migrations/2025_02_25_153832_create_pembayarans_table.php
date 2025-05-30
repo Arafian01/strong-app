@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('image');
             $table->date('tanggal_kirim')->default(now());
             $table->foreignId('user_id')->nullable();
-            $table->enum('status_verifikasi', ['menunggu verifikasi','diterima','ditolak']);
+            $table->enum('status_verifikasi', ['menunggu_verifikasi','diterima','ditolak']);
             $table->date('tanggal_verifikasi')->nullable();
             $table->timestamps();
         });
