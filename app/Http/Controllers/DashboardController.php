@@ -40,8 +40,8 @@ class DashboardController extends Controller
             });
 
         return view('admin.page.dashboard.index', [
-            'jumlahPelanggan' => $jumlahPelanggan,
-            'jumlahTagihan' => $jumlahTagihan,
+            'pelangganStatus' => $jumlahPelanggan,
+            'tagihanStatus' => $jumlahTagihan,
             'totalPenghasilan' => $totalPenghasilan,
         ]);
     }
