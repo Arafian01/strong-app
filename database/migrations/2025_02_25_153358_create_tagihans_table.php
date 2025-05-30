@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('tagihans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('pelanggan_id')->constrained()->onDelete('cascade');
-            $table->string('bulan_tahun');
+            $table->integer('bulan');
+            $table->integer('tahun');
+            $table->integer('harga');
             $table->enum('status_pembayaran', ['belum_dibayar','menunggu_verifikasi','lunas'])->default('belum_dibayar');
             $table->date('jatuh_tempo');
             $table->timestamps();
