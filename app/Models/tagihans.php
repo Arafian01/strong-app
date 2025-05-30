@@ -11,7 +11,9 @@ class tagihans extends Model
 
     protected $fillable = [
         'pelanggan_id',
-        'bulan_tahun',
+        'bulan',
+        'tahun',
+        'harga',
         'status_pembayaran',
         'jatuh_tempo'
     ];
