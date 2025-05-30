@@ -15,17 +15,45 @@ class PembayaranController extends Controller
 {
     public function index()
     {
-        try {
-            $pembayaran = pembayarans::paginate(5);
-            $user = User::all();
-            $paket = pakets::all();
-            $pelanggan = pelanggans::all();
-            $tagihan = tagihans::all();
+        // try {
+        $search = request('search');
+        $entries = request('entries', 10);
 
-            return view('admin.page.pembayaran.index', compact('pembayaran', 'user', 'paket', 'pelanggan', 'tagihan'));
-        } catch (\Exception $e) {
-            return redirect()->route('error.index')->with('error_message', 'Error: ' . $e->getMessage());
-        }
+        $pembayaran = pembayarans::with(['tagihan', 'tagihan.pelanggan.user'])
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    // Search by customer name
+                    $q->whereHas('tagihan.pelanggan.user', function ($subQuery) use ($search) {
+                        $subQuery->where('name', 'ilike', "%$search%");
+                    })
+                        // Search by formatted bulan_tahun (e.g., "January 2025")
+                        ->orWhereHas('tagihan', function ($subQuery) use ($search) {
+                            $subQuery->whereRaw("to_char(to_date(bulan_tahun, 'YYYY-MM'), 'FMMonth YYYY') ilike ?", ["%$search%"])
+                                ->orWhere('jatuh_tempo', 'ilike', "%$search%");
+                        })
+                        // Search by formatted status_verifikasi (e.g., "Belum Dibayar")
+                        ->orWhereRaw("initcap(replace(status_verifikasi, '_', ' ')) ilike ?", ["%$search%"]);
+                });
+            })
+            ->orderByRaw("CASE status_verifikasi 
+        WHEN 'menunggu verifikasi' THEN 1
+        WHEN 'diterima' THEN 2
+        WHEN 'ditolak' THEN 3 
+        ELSE 5 END")
+            ->orderBy('tanggal_kirim', 'desc')
+            ->paginate($entries);
+
+        return view('admin.page.pembayaran.index', [
+            'pembayaran' => $pembayaran,
+            'search' => $search,
+            'entries' => $entries,
+            'pelanggan' => pelanggans::select('id', 'user_id')->with('user:id,name')->get(),
+            'user' => [],
+            'tagihan' => tagihans::select('id', 'pelanggan_id', 'bulan_tahun')->get(),
+        ]);
+        // } catch (\Exception $e) {
+        //     return redirect()->route('error.index')->with('error_message', 'Error: ' . $e->getMessage());
+        // }
     }
 
     public function store(Request $request)
