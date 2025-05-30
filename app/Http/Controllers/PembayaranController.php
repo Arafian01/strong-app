@@ -95,7 +95,7 @@ class PembayaranController extends Controller
                 $status = 'lunas';
             } elseif ($request->input('status_verifikasi') == 'ditolak') {
                 $status = 'belum_dibayar';
-            } elseif ($request->input('status_verifikasi') == 'menunggu verifikasi') {
+            } elseif ($request->input('status_verifikasi') == 'menunggu_verifikasi') {
                 $status = 'menunggu_verifikasi';
             }
 
