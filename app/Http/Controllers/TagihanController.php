@@ -73,13 +73,13 @@ class TagihanController extends Controller
                 ->exists();
 
             if ($exists) {
-                return back()->with('message_error', 'Tagihan untuk pelanggan dan periode ini sudah ada.')->withInput();
+                return back()->with('error_message', 'Tagihan untuk pelanggan dan periode ini sudah ada.')->withInput();
             }
 
             // Get harga from pelanggans->pakets->harga
             $pelanggan = pelanggans::with('paket')->findOrFail($request->input('pelanggan_id'));
             if (!$pelanggan->paket) {
-                return back()->with('message_error', 'Pelanggan tidak memiliki paket yang valid.')->withInput();
+                return back()->with('error_message', 'Pelanggan tidak memiliki paket yang valid.')->withInput();
             }
             $harga = $pelanggan->paket->harga;
 
