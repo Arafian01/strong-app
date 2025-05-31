@@ -1,24 +1,29 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <h2 class="text-2xl font-bold text-gray-800">
-                <span class="bg-gradient-to-r from-red-600 to-orange-500 bg-clip-text text-transparent">
+            <h2 class="text-3xl font-extrabold text-[var(--primary-dark)]">
+                <span class="bg-gradient-to-r from-[var(--accent-red)] to-[var(--primary-bg)] bg-clip-text text-transparent animate-pulse">
                     Manajemen Paket
                 </span>
             </h2>
-            <div class="flex items-center space-x-2">
-                <span class="text-sm text-gray-500">{{ today()->format('d F Y') }}</span>
+            <div class="flex items-center space-x-4">
+                <span class="text-sm font-medium text-[var(--primary-dark)]">{{ today()->format('d F Y') }}</span>
+                <div class="w-10 h-10 bg-[var(--accent-red)] rounded-full flex items-center justify-center shadow-md">
+                    <span class="text-[var(--light-gray)] text-lg font-bold">{{ substr(Auth::user()->name, 0, 1) }}</span>
+                </div>
             </div>
         </div>
     </x-slot>
 
     <!-- Floating Button Mobile -->
-    <button class="md:hidden fixed bottom-6 right-6 bg-red-600 text-white p-4 rounded-full shadow-lg z-50 hover:bg-red-700 transition-all"
+    <button class="md:hidden fixed bottom-6 right-6 bg-[var(--accent-red)] text-[var(--light-gray)] p-4 rounded-full shadow-lg z-50 hover:bg-[var(--primary-bg)] transition-all transform hover:scale-110"
             onclick="toggleModal('createModal')">
-        ➕ Tambah Paket
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
     </button>
 
-    <div class="py-6 px-4 sm:px-6 lg:px-8">
+    <div class="py-8 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[var(--light-gray)] to-white">
         <!-- Notifikasi -->
         @if(Session::has('message_insert'))
         <script>
@@ -41,36 +46,36 @@
         </script>
         @endif
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <!-- Form Desktop -->
-            <div class="hidden md:block bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-100 p-6">
+            <div class="hidden md:block bg-white/95 backdrop-blur-lg rounded-xl p-8 shadow-lg border border-[var(--primary-bg)] transform transition-all duration-300 hover:shadow-2xl" data-aos="fade-right">
                 <form action="{{ route('paket.store') }}" method="post" class="space-y-6">
                     @csrf
-                    <div class="mb-6">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Tambah Paket Baru</h3>
+                    <div class="mb-4">
+                        <h3 class="text-xl font-semibold text-[var(--primary-dark)]">Tambah Paket Baru</h3>
                     </div>
                     
                     <div>
-                        <x-input-label for="nama" value="Nama Paket" />
+                        <x-input-label for="nama" value="Nama Paket" class="text-[var(--primary-dark)] font-medium" />
                         <x-text-input 
                             id="nama" 
                             name="nama" 
                             type="text"
-                            class="mt-1 w-full"
+                            class="mt-1 w-full border-[var(--light-gray)] focus:border-[var(--accent-red)] focus:ring-[var(--accent-red)] rounded-lg"
                             placeholder="Contoh: Paket Internet 100Mbps"
                             required
                         />
                     </div>
 
                     <div>
-                        <x-input-label for="harga" value="Harga Paket" />
+                        <x-input-label for="harga" value="Harga Paket" class="text-[var(--primary-dark)] font-medium" />
                         <div class="relative mt-1">
-                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">Rp</span>
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--primary-dark)]">Rp</span>
                             <x-text-input 
                                 id="harga" 
                                 name="harga" 
                                 type="number"
-                                class="w-full pl-8"
+                                class="w-full pl-8 border-[var(--light-gray)] focus:border-[var(--accent-red)] focus:ring-[var(--accent-red)] rounded-lg"
                                 placeholder="500000"
                                 required
                             />
@@ -78,12 +83,12 @@
                     </div>
 
                     <div>
-                        <x-input-label for="deskripsi" value="Deskripsi" />
+                        <x-input-label for="deskripsi" value="Deskripsi" class="text-[var(--primary-dark)] font-medium" />
                         <textarea 
                             id="deskripsi" 
                             name="deskripsi" 
-                            rows="3"
-                            class="mt-1 w-full rounded-lg border-gray-200 shadow-sm focus:border-red-500 focus:ring-red-500"
+                            rows="4"
+                            class="mt-1 w-full rounded-lg border-[var(--light-gray)] shadow-sm focus:border-[var(--accent-red)] focus:ring-[var(--accent-red)]"
                             placeholder="Masukkan deskripsi lengkap paket"
                             required
                         ></textarea>
@@ -91,7 +96,7 @@
 
                     <div class="flex justify-end">
                         <button type="submit" 
-                                class="bg-gradient-to-r from-red-600 to-orange-500 text-white px-6 py-2 rounded-lg hover:shadow-lg transition-all">
+                                class="bg-[var(--accent-red)] text-[var(--light-gray)] px-6 py-2 rounded-lg hover:bg-[var(--primary-bg)] transition-all transform hover:scale-105">
                             Simpan Paket
                         </button>
                     </div>
@@ -99,63 +104,61 @@
             </div>
 
             <!-- Daftar Paket -->
-            <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-100 p-6">
+            <div class="bg-white/95 backdrop-blur-lg rounded-xl p-8 shadow-lg border border-[var(--primary-bg)]" data-aos="fade-left">
                 <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-lg font-semibold text-gray-800">Daftar Paket</h3>
-                    <span class="text-sm text-gray-500">Total: {{ $paket->total() }} paket</span>
+                    <h3 class="text-xl font-semibold text-[var(--primary-dark)]">Daftar Paket</h3>
+                    <span class="text-sm text-[var(--primary-dark)]">Total: {{ $paket->total() }} paket</span>
                 </div>
 
-                <form method="GET" action="{{ route('paket.index') }}" class="mb-4">
-                    <div class="flex gap-2">
+                <form method="GET" action="{{ route('paket.index') }}" class="mb-6">
+                    <div class="flex gap-3">
                         <input type="text" name="search" value="{{ request('search') }}" 
-                               placeholder="Cari berdasarkan nama/deskripsi/harga..." 
-                               class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-red-500 focus:ring-red-500">
-                        <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+                               placeholder="Cari nama, deskripsi, atau harga..." 
+                               class="w-full px-4 py-2 rounded-lg border border-[var(--light-gray)] focus:border-[var(--accent-red)] focus:ring-[var(--accent-red)] text-[var(--primary-dark)]">
+                        <button type="submit" class="bg-[var(--accent-red)] text-[var(--light-gray)] px-4 py-2 rounded-lg hover:bg-[var(--primary-bg)] transition-all">
                             Cari
                         </button>
                     </div>
                 </form> 
 
-                <div class="overflow-x-auto rounded-lg border border-gray-100">
-                    <table class="w-full" >
-                        <thead class="bg-gray-50">
+                <div class="overflow-x-auto rounded-lg border border-[var(--light-gray)]">
+                    <table class="w-full">
+                        <thead class="bg-[var(--light-gray)]">
                             <tr>
-                                <th class="px-4 py-3 text-center text-sm font-medium text-gray-700">No</th>
-                                <th class="px-4 py-3 text-center text-sm font-medium text-gray-700">Nama Paket</th>
-                                <th class="px-4 py-3 text-center text-sm font-medium text-gray-700">Harga</th>
-                                <th class="px-4 py-3 text-center text-sm font-medium text-gray-700">Aksi</th>
+                                <th class="px-4 py-3 text-center text-sm font-semibold text-[var(--primary-dark)]">No</th>
+                                <th class="px-4 py-3 text-center text-sm font-semibold text-[var(--primary-dark)]">Nama Paket</th>
+                                <th class="px-4 py-3 text-center text-sm font-semibold text-[var(--primary-dark)]">Harga</th>
+                                <th class="px-4 py-3 text-center text-sm font-semibold text-[var(--primary-dark)]">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-200">
+                        <tbody class="divide-y divide-[var(--light-gray)]">
                             @foreach ($paket as $key => $p)
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-4 py-3 text-sm text-gray-600">
+                            <tr class="hover:bg-[var(--light-gray)] transition-colors">
+                                <td class="px-4 py-3 text-sm text-[var(--primary-dark)] text-center">
                                     {{ $paket->perPage() * ($paket->currentPage() - 1) + $key + 1 }}
                                 </td>
-                                <td class="px-4 py-3">
-                                    <div class="font-medium text-gray-800 text-left">{{ $p->nama_paket }}</div>
-                                    <div class="text-sm text-gray-500 mt-1">{{ $p->deskripsi }}</div>
+                                <td class="px-4 py-3 text-left">
+                                    <div class="font-medium text-[var(--primary-dark)]">{{ $p->nama_paket }}</div>
+                                    <div class="text-sm text-[var(--primary-dark)]/70 mt-1">{{ Str::limit($p->deskripsi, 50) }}</div>
                                 </td>
-                                <td class="px-4 py-3 text-sm font-medium text-gray-800">
+                                <td class="px-4 py-3 text-sm font-medium text-[var(--primary-dark)] text-center">
                                     Rp {{ number_format($p->harga, 0, ',', '.') }}
                                 </td>
-                                <td class="px-4 py-5 flex justify-center ">
-                                    <div class="space-x-2">
-                                        <button 
-                                            data-id="{{ $p->id }}"
-                                            data-nama="{{ $p->nama_paket }}"
-                                            data-harga="{{ $p->harga }}"
-                                            data-deskripsi="{{ $p->deskripsi }}"
-                                            onclick="openEditModal(this)"
-                                            class="px-3 py-1 bg-orange-100 text-orange-600 rounded-md hover:bg-orange-200 transition-colors text-sm">
-                                            ✏️ Edit
-                                        </button>
-                                        <button 
-                                            onclick="deletePaket('{{ $p->id }}','{{ $p->nama_paket }}')"
-                                            class="px-3 py-1 bg-red-100 text-red-600 rounded-md hover:bg-red-200 transition-colors text-sm">
-                                            🗑️ Hapus
-                                        </button>
-                                    </div>
+                                <td class="px-4 py-3 flex justify-center space-x-2">
+                                    <button 
+                                        data-id="{{ $p->id }}"
+                                        data-nama="{{ $p->nama_paket }}"
+                                        data-harga="{{ $p->harga }}"
+                                        data-deskripsi="{{ $p->deskripsi }}"
+                                        onclick="openEditModal(this)"
+                                        class="px-3 py-1 bg-[var(--primary-bg)] text-[var(--light-gray)] rounded-md hover:bg-[var(--accent-red)] transition-colors text-sm">
+                                        ✏️ Edit
+                                    </button>
+                                    <button 
+                                        onclick="deletePaket('{{ $p->id }}','{{ $p->nama_paket }}')"
+                                        class="px-3 py-1 bg-[var(--accent-red)] text-[var(--light-gray)] rounded-md hover:bg-[var(--primary-dark)] transition-colors text-sm">
+                                        🗑️ Hapus
+                                    </button>
                                 </td>
                             </tr>
                             @endforeach
@@ -163,20 +166,20 @@
                     </table>
                 </div>
 
-                <div class="mt-4 flex items-center justify-between">
+                <div class="mt-6 flex items-center justify-between">
                     <!-- Entries Per Page -->
                     <form method="GET" action="{{ route('paket.index') }}" class="flex items-center space-x-2">
                         <input type="hidden" name="search" value="{{ request('search') }}">
                         <input type="hidden" name="page" value="{{ request('page', 1) }}">
-                        <label for="entries" class="text-sm">Show:</label>
+                        <label for="entries" class="text-sm text-[var(--primary-dark)]">Show:</label>
                         <select name="entries" onchange="this.form.submit()"
-                            class="w-20 px-2 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500">
+                            class="w-20 px-2 py-1 border border-[var(--light-gray)] rounded-md focus:ring-2 focus:ring-[var(--accent-red)] text-[var(--primary-dark)]">
                             <option value="5" {{ request('entries') == 5 ? 'selected' : '' }}>5</option>
                             <option value="10" {{ request('entries') == 10 ? 'selected' : '' }}>10</option>
                             <option value="25" {{ request('entries') == 25 ? 'selected' : '' }}>25</option>
                             <option value="50" {{ request('entries') == 50 ? 'selected' : '' }}>50</option>
                         </select>
-                        <label class="text-sm">entries</label>
+                        <label class="text-sm text-[var(--primary-dark)]">entries</label>
                     </form>
 
                     <!-- Pagination -->
@@ -186,17 +189,18 @@
                             'search' => request('search')
                         ])->links() }}
                     </div>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Create Modal Mobile -->
-    <div id="createModal" class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm">
+    <div id="createModal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm">
         <div class="fixed inset-0 flex items-center justify-center p-4">
-            <div class="w-full max-w-md bg-white rounded-2xl shadow-xl">
-                <div class="p-6 border-b flex justify-between items-center">
-                    <h3 class="text-lg font-semibold">Tambah Paket Baru</h3>
-                    <button onclick="toggleModal('createModal')" class="text-gray-500 hover:text-gray-700">
+            <div class="w-full max-w-md bg-white/95 backdrop-blur-lg rounded-xl shadow-2xl border border-[var(--primary-bg)]">
+                <div class="p-6 border-b border-[var(--light-gray)] flex justify-between items-center">
+                    <h3 class="text-lg font-semibold text-[var(--primary-dark)]">Tambah Paket Baru</h3>
+                    <button onclick="toggleModal('createModal')" class="text-[var(--primary-dark)] hover:text-[var(--accent-red)]">
                         ✕
                     </button>
                 </div>
@@ -205,26 +209,26 @@
                     <form action="{{ route('paket.store') }}" method="post" class="space-y-6">
                         @csrf
                         <div>
-                            <x-input-label for="nama" value="Nama Paket" />
+                            <x-input-label for="nama" value="Nama Paket" class="text-[var(--primary-dark)] font-medium" />
                             <x-text-input 
                                 id="nama" 
                                 name="nama" 
                                 type="text"
-                                class="mt-1 w-full"
+                                class="mt-1 w-full border-[var(--light-gray)] focus:border-[var(--accent-red)] focus:ring-[var(--accent-red)] rounded-lg"
                                 placeholder="Contoh: Paket Internet 100Mbps"
                                 required
                             />
                         </div>
                     
                         <div>
-                            <x-input-label for="harga" value="Harga Paket" />
+                            <x-input-label for="harga" value="Harga Paket" class="text-[var(--primary-dark)] font-medium" />
                             <div class="relative mt-1">
-                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">Rp</span>
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--primary-dark)]">Rp</span>
                                 <x-text-input 
                                     id="harga" 
                                     name="harga" 
                                     type="number"
-                                    class="w-full pl-8"
+                                    class="w-full pl-8 border-[var(--light-gray)] focus:border-[var(--accent-red)] focus:ring-[var(--accent-red)] rounded-lg"
                                     placeholder="500000"
                                     required
                                 />
@@ -232,12 +236,12 @@
                         </div>
                     
                         <div>
-                            <x-input-label for="deskripsi" value="Deskripsi" />
+                            <x-input-label for="deskripsi" value="Deskripsi" class="text-[var(--primary-dark)] font-medium" />
                             <textarea 
                                 id="deskripsi" 
                                 name="deskripsi" 
-                                rows="3"
-                                class="mt-1 w-full rounded-lg border-gray-200 shadow-sm focus:border-red-500 focus:ring-red-500"
+                                rows="4"
+                                class="mt-1 w-full rounded-lg border-[var(--light-gray)] shadow-sm focus:border-[var(--accent-red)] focus:ring-[var(--accent-red)]"
                                 placeholder="Masukkan deskripsi lengkap paket"
                                 required
                             ></textarea>
@@ -245,7 +249,7 @@
                     
                         <div class="flex justify-end">
                             <button type="submit" 
-                                class="bg-gradient-to-r from-red-600 to-orange-500 text-white px-6 py-2 rounded-lg hover:shadow-lg transition-all">
+                                class="bg-[var(--accent-red)] text-[var(--light-gray)] px-6 py-2 rounded-lg hover:bg-[var(--primary-bg)] transition-all transform hover:scale-105">
                                 Simpan Paket
                             </button>
                         </div>
@@ -256,12 +260,12 @@
     </div>
 
     <!-- Edit Modal -->
-    <div id="editModal" class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm">
+    <div id="editModal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm">
         <div class="fixed inset-0 flex items-center justify-center p-4">
-            <div class="w-full max-w-md bg-white rounded-2xl shadow-xl">
-                <div class="p-6 border-b flex justify-between items-center">
-                    <h3 class="text-lg font-semibold">Edit Paket</h3>
-                    <button onclick="toggleModal('editModal')" class="text-gray-500 hover:text-gray-700">
+            <div class="w-full max-w-md bg-white/95 backdrop-blur-lg rounded-xl shadow-2xl border border-[var(--primary-bg)]">
+                <div class="p-6 border-b border-[var(--light-gray)] flex justify-between items-center">
+                    <h3 class="text-lg font-semibold text-[var(--primary-dark)]">Edit Paket</h3>
+                    <button onclick="toggleModal('editModal')" class="text-[var(--primary-dark)] hover:text-[var(--accent-red)]">
                         ✕
                     </button>
                 </div>
@@ -269,48 +273,48 @@
                 <form method="POST" id="editForm" class="p-6 space-y-6">
                     @csrf
                     <div>
-                        <x-input-label for="edit_nama" value="Nama Paket" />
+                        <x-input-label for="edit_nama" value="Nama Paket" class="text-[var(--primary-dark)] font-medium" />
                         <x-text-input 
                             id="edit_nama" 
                             name="nama" 
                             type="text"
-                            class="mt-1 w-full"
+                            class="mt-1 w-full border-[var(--light-gray)] focus:border-[var(--accent-red)] focus:ring-[var(--accent-red)] rounded-lg"
                             required
                         />
                     </div>
 
                     <div>
-                        <x-input-label for="edit_harga" value="Harga Paket" />
+                        <x-input-label for="edit_harga" value="Harga Paket" class="text-[var(--primary-dark)] font-medium" />
                         <div class="relative mt-1">
-                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">Rp</span>
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--primary-dark)]">Rp</span>
                             <x-text-input 
                                 id="edit_harga" 
                                 name="harga" 
                                 type="number"
-                                class="w-full pl-8"
+                                class="w-full pl-8 border-[var(--light-gray)] focus:border-[var(--accent-red)] focus:ring-[var(--accent-red)] rounded-lg"
                                 required
                             />
                         </div>
                     </div>
 
                     <div>
-                        <x-input-label for="edit_deskripsi" value="Deskripsi" />
+                        <x-input-label for="edit_deskripsi" value="Deskripsi" class="text-[var(--primary-dark)] font-medium" />
                         <textarea 
                             id="edit_deskripsi" 
                             name="deskripsi" 
-                            rows="3"
-                            class="mt-1 w-full rounded-lg border-gray-200 shadow-sm focus:border-red-500 focus:ring-red-500"
+                            rows="4"
+                            class="mt-1 w-full rounded-lg border-[var(--light-gray)] shadow-sm focus:border-[var(--accent-red)] focus:ring-[var(--accent-red)]"
                             required
                         ></textarea>
                     </div>
 
                     <div class="flex justify-end space-x-3">
                         <button type="button" onclick="toggleModal('editModal')"
-                                class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                                class="px-4 py-2 text-[var(--primary-dark)] hover:bg-[var(--light-gray)] rounded-lg transition-all">
                             Batal
                         </button>
                         <button type="submit" 
-                                class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                                class="px-4 py-2 bg-[var(--accent-red)] text-[var(--light-gray)] rounded-lg hover:bg-[var(--primary-bg)] transition-all transform hover:scale-105">
                             Simpan Perubahan
                         </button>
                     </div>
@@ -319,43 +323,15 @@
         </div>
     </div>
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // Fungsi Pencarian
-        function searchTable() {
-            // Ambil input pencarian
-            let input = document.getElementById("searchInput");
-            let filter = input.value.toLowerCase();
-            
-            // Ambil tabel dan baris
-            let table = document.getElementById("packageTable");
-            let rows = table.getElementsByTagName("tr");
+        AOS.init({
+            duration: 1000,
+            easing: 'ease-in-out',
+            once: true,
+            offset: 100
+        });
 
-            // Loop melalui semua baris
-            for (let i = 1; i < rows.length; i++) { // Mulai dari 1 untuk melewati header
-                let cells = rows[i].getElementsByTagName("td");
-                let showRow = false;
-                
-                // Cek setiap kolom yang ingin dicari
-                for (let j = 0; j < cells.length; j++) {
-                    if (cells[j]) {
-                        let text = cells[j].textContent.toLowerCase() || cells[j].innerText.toLowerCase();
-                        
-                        // Handle kolom harga khusus
-                        if (j === 2) { // Kolom harga (indeks 2)
-                            text = text.replace(/[^0-9]/g, ''); // Hapus karakter non-numeric
-                        }
-                        
-                        if (text.indexOf(filter) > -1) {
-                            showRow = true;
-                            break;
-                        }
-                    }
-                }
-                
-                // Tampilkan/sembunyikan baris
-                rows[i].style.display = showRow ? "" : "none";
-            }
-        }
         // Toggle Modal
         function toggleModal(modalId) {
             const modal = document.getElementById(modalId);
@@ -393,8 +369,8 @@
                 text: "Data yang dihapus tidak dapat dikembalikan!",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
+                confirmButtonColor: '#DA1212',
+                cancelButtonColor: '#11468F',
                 confirmButtonText: 'Ya, Hapus!',
                 cancelButtonText: 'Batal'
             });
@@ -420,4 +396,23 @@
             }
         }
     </script>
+
+    <style>
+        :root {
+            --primary-dark: #041562;
+            --primary-bg: #11468F;
+            --accent-red: #DA1212;
+            --light-gray: #EEEEEE;
+        }
+
+        .animate-pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+    </style>
 </x-app-layout>
