@@ -26,17 +26,17 @@ class PembayaranController extends Controller
                     $q->whereHas('tagihan.pelanggan.user', function ($subQuery) use ($search) {
                         $subQuery->where('name', 'ilike', "%$search%");
                     })
-                        // Search by formatted bulan_tahun (e.g., "January 2025")
+                        // Search by formatted bulan and tahun (e.g., "January 2025")
                         ->orWhereHas('tagihan', function ($subQuery) use ($search) {
-                            $subQuery->whereRaw("to_char(to_date(bulan_tahun, 'YYYY-MM'), 'FMMonth YYYY') ilike ?", ["%$search%"])
+                            $subQuery->whereRaw("to_char(to_date(bulan::text, 'MM'), 'FMMonth') || ' ' || tahun ilike ?", ["%$search%"])
                                 ->orWhere('jatuh_tempo', 'ilike', "%$search%");
                         })
-                        // Search by formatted status_verifikasi (e.g., "Belum Dibayar")
+                        // Search by formatted status_verifikasi (e.g., "Menunggu Verifikasi")
                         ->orWhereRaw("initcap(replace(status_verifikasi, '_', ' ')) ilike ?", ["%$search%"]);
                 });
             })
             ->orderByRaw("CASE status_verifikasi 
-        WHEN 'menunggu verifikasi' THEN 1
+        WHEN 'menunggu_verifikasi' THEN 1
         WHEN 'diterima' THEN 2
         WHEN 'ditolak' THEN 3 
         ELSE 5 END")
@@ -49,7 +49,7 @@ class PembayaranController extends Controller
             'entries' => $entries,
             'pelanggan' => pelanggans::select('id', 'user_id')->with('user:id,name')->get(),
             'user' => [],
-            'tagihan' => tagihans::select('id', 'pelanggan_id', 'bulan_tahun')->get(),
+            'tagihan' => tagihans::select('id', 'pelanggan_id', 'bulan', 'tahun')->get(),
         ]);
         // } catch (\Exception $e) {
         //     return redirect()->route('error.index')->with('error_message', 'Error: ' . $e->getMessage());
