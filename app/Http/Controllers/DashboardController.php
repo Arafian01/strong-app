@@ -11,11 +11,14 @@ use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Sekarang bulan dan tahun
+        // Current month and year
         $currentMonth = Carbon::now()->format('m');
         $currentYear = Carbon::now()->format('Y');
+
+        // Selected year for income chart (default to current year)
+        $selectedYear = $request->input('year', $currentYear);
 
         // 1. Jumlah pelanggan berdasarkan status
         $jumlahPelanggan = pelanggans::select('status', DB::raw('count(*) as total'))
@@ -33,16 +36,36 @@ class DashboardController extends Controller
         $totalPenghasilan = tagihans::whereYear('jatuh_tempo', $currentYear)
             ->whereMonth('jatuh_tempo', $currentMonth)
             ->where('status_pembayaran', 'lunas')
-            ->with('pelanggan.paket')
-            ->get()
-            ->sum(function ($tagihan) {
-                return $tagihan->pelanggan && $tagihan->pelanggan->paket ? $tagihan->pelanggan->paket->harga : 0;
-            });
+            ->sum('harga');
+
+        // 4. Penghasilan per bulan untuk tahun yang dipilih
+        $monthlyIncome = tagihans::where('status_pembayaran', 'lunas')
+            ->where('tahun', $selectedYear)
+            ->select(
+                DB::raw('bulan as month'),
+                DB::raw('SUM(harga) as total_income')
+            )
+            ->groupBy('bulan')
+            ->orderBy('bulan')
+            ->pluck('total_income', 'month')
+            ->toArray();
+
+        // Prepare income data for all 12 months (fill missing months with 0)
+        $incomeData = array_fill(1, 12, 0);
+        foreach ($monthlyIncome as $month => $income) {
+            $incomeData[$month] = $income;
+        }
+
+        // Available years for the dropdown (e.g., from 2020 to next year)
+        $years = range(2020, $currentYear + 1);
 
         return view('admin.page.dashboard.index', [
             'pelangganStatus' => $jumlahPelanggan,
             'tagihanStatus' => $jumlahTagihan,
             'totalPenghasilan' => $totalPenghasilan,
+            'incomeData' => $incomeData,
+            'selectedYear' => $selectedYear,
+            'years' => $years,
         ]);
     }
 
