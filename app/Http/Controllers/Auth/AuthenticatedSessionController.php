@@ -48,14 +48,13 @@ class AuthenticatedSessionController extends Controller
                 return back()->withErrors(['email' => 'Akun belum diverifikasi.']);
             }
             return redirect()->intended(route('dashboard'));
-        } 
+        }
 
         if ($user->role === 'admin') {
             return redirect()->intended(route('dashboardAdmin.index'));
-        } 
-        
-        return redirect()->intended(route('dashboard'));
-
+        } else {
+            return redirect()->intended(route('dashboard'));
+        }
     }
 
     /**
