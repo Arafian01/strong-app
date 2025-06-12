@@ -16,14 +16,13 @@ class laporanController extends Controller
     public function store(Request $request)
     {
         try {
-            $tahun = $request->input('bulan_tahun');
+            $tahun = $request->input('tahun');
 
             $pelanggan = pelanggans::with('user')->get();
 
-            $tagihan = tagihans::where('bulan_tahun', 'LIKE', "$tahun-%")
+            $tagihan = tagihans::where('tahun', $tahun)
                 ->get()
                 ->groupBy('pelanggan_id');
-
             return view('admin.page.laporan.printLaporan', compact('tagihan', 'pelanggan', 'tahun'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
