@@ -1,5 +1,5 @@
 <x-app-layout>
-    <x-slot name="header">
+    <x-slot name="header" class="z-[5]">
         <div class="flex items-center justify-between">
             <h2 class="text-3xl font-extrabold text-[var(--primary-dark)]">
                 <span class="bg-gradient-to-r from-[var(--accent-red)] to-[var(--primary-bg)] bg-clip-text text-transparent animate-pulse">
