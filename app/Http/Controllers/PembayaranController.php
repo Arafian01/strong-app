@@ -49,7 +49,7 @@ class PembayaranController extends Controller
             'entries' => $entries,
             'pelanggan' => pelanggans::select('id', 'user_id')->with('user:id,name')->get(),
             'user' => [],
-            'tagihan' => tagihans::select('id', 'pelanggan_id', 'bulan', 'tahun')->get(),
+            'tagihan' => tagihans::all(),
         ]);
         // } catch (\Exception $e) {
         //     return redirect()->route('error.index')->with('error_message', 'Error: ' . $e->getMessage());
