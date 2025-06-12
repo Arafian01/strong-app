@@ -33,7 +33,7 @@
                             {{ __('Dashboard') }}
                         </x-nav-link>
 
-                        <x-dropdown>
+                        <x-dropdown class="z-[100]">
                             <x-slot name="trigger">
                                 <button
                                     class="flex items-center space-x-1 px-3 py-2 text-sm font-medium text-[var(--primary-dark)] hover:text-[var(--accent-red)] transition-colors">
