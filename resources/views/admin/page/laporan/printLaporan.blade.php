@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,16 +9,23 @@
     <style type="text/tailwindcss">
         @layer utilities {
             @media print {
-                .page-break { page-break-after: always; }
-                thead { display: table-header-group; }
+                .page-break {
+                    page-break-after: always;
+                }
+
+                thead {
+                    display: table-header-group;
+                }
             }
         }
+
         @page {
             size: A4 landscape;
             margin: 1cm;
         }
     </style>
 </head>
+
 <body class="bg-gray-100 text-sm font-sans">
 
     <div class="bg-white p-6 mx-auto w-[297mm] min-h-[210mm]">
@@ -59,10 +67,9 @@
 
                             @for ($i = 1; $i <= 12; $i++)
                                 @php
-                                    $bulanFormat = $tahun . '-' . str_pad($i, 2, '0', STR_PAD_LEFT);
                                     $status = null;
                                     if (isset($tagihan[$p->id])) {
-                                        $tagihanBulanIni = $tagihan[$p->id]->where('bulan_tahun', $bulanFormat)->first();
+                                        $tagihanBulanIni = $tagihan[$p->id]->where('bulan', $i)->first();
                                         if ($tagihanBulanIni) {
                                             $status = $tagihanBulanIni->status_pembayaran;
                                         }
@@ -106,7 +113,8 @@
     </div>
 
     <script>
-        window.print();
+        //window.print();
     </script>
 </body>
+
 </html>
