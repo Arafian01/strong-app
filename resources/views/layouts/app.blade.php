@@ -68,6 +68,11 @@
         .transform-transition {
             transition: transform 0.2s ease;
         }
+
+        nav {
+            position: relative;
+            z-index: 90;
+        }
     </style>
 </head>
 
