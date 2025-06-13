@@ -23,12 +23,13 @@ class tagihanUserController extends Controller
                     $query->whereHas('pelanggan.user', function ($subQuery) use ($search) {
                         $subQuery->where('name', 'like', "%$search%");
                     })
-                    ->orWhere('bulan_tahun', 'like', "%$search%")
-                    ->orWhere('status_pembayaran', 'like', "%$search%")
-                    ->orWhere('jatuh_tempo', 'like', "%$search%");
+                        ->orWhereRaw("CONCAT(bulan, ' ', tahun) LIKE ?", ["%$search%"])
+                        ->orWhere('status_pembayaran', 'like', "%$search%")
+                        ->orWhere('jatuh_tempo', 'like', "%$search%");
                 });
             })
-            ->orderBy('bulan_tahun', 'desc')
+            ->orderBy('tahun', 'desc')
+            ->orderBy('bulan', 'desc')
             ->paginate($entries);
 
         return view('users.page.tagihan.index', [
