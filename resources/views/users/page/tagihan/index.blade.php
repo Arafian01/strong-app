@@ -4,17 +4,21 @@
         .modal-scroll::-webkit-scrollbar {
             width: 8px;
         }
+
         .modal-scroll::-webkit-scrollbar-track {
             background: #f1f1f1;
             border-radius: 4px;
         }
+
         .modal-scroll::-webkit-scrollbar-thumb {
             background: #ccc;
             border-radius: 4px;
         }
+
         .modal-scroll::-webkit-scrollbar-thumb:hover {
             background: #999;
         }
+
         /* Ensure modal is centered and scrollable */
         .modal-container {
             display: flex;
@@ -23,6 +27,7 @@
             min-height: 100vh;
             padding: 1rem;
         }
+
         .modal-content {
             max-height: calc(100vh - 2rem);
             overflow-y: auto;
@@ -75,7 +80,8 @@
                     <button type="submit"
                         class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">Cari</button>
                 </form>
-                <form method="GET" action="{{ route('tagihan.index') }}" class="hidden md:flex items-center space-x-2">
+                <form method="GET" action="{{ route('tagihan.index') }}"
+                    class="hidden md:flex items-center space-x-2">
                     <input type="hidden" name="search" value="{{ request('search') }}">
                     <label for="entries" class="text-sm">Tampilkan:</label>
                     <select name="entries" onchange="this.form.submit()"
@@ -91,7 +97,8 @@
 
             <div class="py-6 px-4 sm:px-6 lg:px-8">
                 <!-- Desktop Table -->
-                <div class="hidden sm:block bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-100 p-6">
+                <div
+                    class="hidden sm:block bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-100 p-6">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-lg font-semibold text-gray-800">Daftar Tagihan</h3>
                     </div>
@@ -111,15 +118,19 @@
                                 @foreach ($tagihan as $key => $t)
                                     <tr class="hover:bg-gray-50 transition-colors">
                                         <td class="px-4 py-3 text-center">{{ $tagihan->firstItem() + $key }}</td>
-                                        <td class="px-4 py-3 text-center">{{ date('F Y', strtotime($t->bulan_tahun)) }}</td>
-                                        <td class="px-4 py-3 text-center">Rp {{ number_format($t->pelanggan->paket->harga, 0, ',', '.') }}</td>
+                                        <td class="px-4 py-3 text-center">
+                                            {{ \Carbon\Carbon::createFromDate($t->tahun, $t->bulan, 1)->translatedFormat('F Y') }}
+                                        </td>
+                                        <td class="px-4 py-3 text-center">Rp
+                                            {{ number_format($t->pelanggan->paket->harga, 0, ',', '.') }}</td>
                                         <td class="px-4 py-3 text-center">
                                             {{ ucfirst(str_replace('_', ' ', $t->status_pembayaran)) }}
                                         </td>
                                         <td class="px-4 py-3 text-center">{{ $t->jatuh_tempo }}</td>
                                         <td class="px-4 py-3 text-center">
                                             @if ($t->status_pembayaran == 'belum_dibayar')
-                                                <button onclick="toggleModal('createModal', {{ $t->id }}, '{{ date('F Y', strtotime($t->bulan_tahun)) }}', '{{ $t->pelanggan->paket->harga }}')"
+                                                <button
+                                                    onclick="toggleModal('createModal', {{ $t->id }}, '{{ \Carbon\Carbon::createFromDate($t->tahun, $t->bulan, 1)->translatedFormat('F Y') }}', '{{ $t->pelanggan->paket->harga }}')"
                                                     class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
                                                     Bayar
                                                 </button>
@@ -135,78 +146,7 @@
                     </div>
                 </div>
 
-                <!-- Create Modal -->
-                <div id="createModal" class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm">
-                    <div class="modal-container">
-                        <div class="w-full max-w-2xl bg-white rounded-2xl shadow-xl flex flex-col modal-content">
-                            <!-- Header -->
-                            <div class="p-6 border-b bg-red-50 rounded-t-2xl flex justify-between items-center">
-                                <div>
-                                    <h3 class="text-xl font-bold text-red-600" id="modal-title">Bayar Tagihan</h3>
-                                    <p class="text-sm text-red-400 mt-1">Upload bukti pembayaran (*)</p>
-                                </div>
-                                <button onclick="toggleModal('createModal')"
-                                    class="text-red-500 hover:text-red-700 text-2xl p-2">✕</button>
-                            </div>
-                            <form id="createForm" action="{{ route('pembayaran.store') }}" method="POST"
-                                enctype="multipart/form-data" class="flex-1 flex flex-col overflow-hidden">
-                                @csrf
-                                <input type="hidden" name="tagihan_id" id="tagihan_id">
-                                <div class="flex-1 overflow-y-auto p-6 space-y-4 modal-scroll">
-                                    <!-- Harga -->
-                                    <div class="space-y-2">
-                                        <label class="block text-sm font-medium text-gray-700">
-                                            Harga <span class="text-red-500">*</span>
-                                        </label>
-                                        <input type="text" id="harga" readonly
-                                            class="w-full p-2 rounded-lg border border-gray-200 bg-gray-100 text-gray-700" />
-                                    </div>
-                                    <!-- Upload Bukti -->
-                                    <div class="space-y-2">
-                                        <label class="block text-sm font-medium text-gray-700">
-                                            Upload Bukti Pembayaran <span class="text-red-500">*</span>
-                                        </label>
-                                        <div class="flex items-center justify-center">
-                                            <div class="bg-white p-6 rounded-xl shadow-lg">
-                                                <div class="relative w-64 h-64">
-                                                    <div id="image-preview-create"
-                                                        class="w-full h-full bg-gray-200 rounded-xl overflow-hidden flex items-center justify-center">
-                                                        <span class="text-gray-500">No image selected</span>
-                                                    </div>
-                                                    <label for="image-input-create"
-                                                        class="absolute bottom-2 right-2 bg-white p-2 rounded-full shadow-lg cursor-pointer">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700"
-                                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                        </svg>
-                                                    </label>
-                                                    <input type="file" id="image-input-create" name="image"
-                                                        accept="image/*" required class="hidden">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Footer -->
-                                <div class="p-6 border-t bg-gray-50 rounded-b-2xl flex justify-end space-x gaflex justify-end space-x-3">
-                                    <button type="button" onclick="toggleModal('createModal')"
-                                        class="px-6 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Batal</button>
-                                    <button type="submit"
-                                        class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 flex items-center">
-                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M5 13l4 4L19 7" />
-                                        </svg>Simpan Data
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+
 
                 <!-- Mobile Card List -->
                 <div class="sm:hidden space-y-4">
@@ -214,7 +154,9 @@
                         <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-100 p-4">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <h4 class="font-semibold text-gray-800">Tagihan Bulan {{ date('F Y', strtotime($t->bulan_tahun)) }}</h4>
+                                    <h4 class="font-semibold text-gray-800">Tagihan Bulan
+                                        {{ \Carbon\Carbon::createFromDate($t->tahun, $t->bulan, 1)->translatedFormat('F Y') }}
+                                    </h4>
                                 </div>
                                 <span
                                     class="px-2 py-1 {{ $t->status_pembayaran == 'lunas' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600' }} rounded-full text-xs">
@@ -222,12 +164,14 @@
                                 </span>
                             </div>
                             <div class="mt-2 grid grid-cols-2 gap-2 text-xs text-gray-700">
-                                <div><span class="font-medium">Harga:</span> Rp {{ number_format($t->pelanggan->paket->harga, 0, ',', '.') }}</div>
+                                <div><span class="font-medium">Harga:</span> Rp
+                                    {{ number_format($t->pelanggan->paket->harga, 0, ',', '.') }}</div>
                                 <div><span class="font-medium">Jatuh Tempo:</span> {{ $t->jatuh_tempo }}</div>
                             </div>
                             @if ($t->status_pembayaran == 'belum_dibayar')
                                 <div class="mt-2">
-                                    <button onclick="toggleModal('createModal', {{ $t->id }}, '{{ date('F Y', strtotime($t->bulan_tahun)) }}', '{{ $t->pelanggan->paket->harga }}')"
+                                    <button
+                                        onclick="toggleModal('createModal', {{ $t->id }}, '{{ \Carbon\Carbon::createFromDate($t->tahun, $t->bulan, 1)->translatedFormat('F Y') }}', '{{ $t->pelanggan->paket->harga }}')"
                                         class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
                                         Bayar
                                     </button>
@@ -238,6 +182,79 @@
                     <div class="pt-2">
                         {{ $tagihan->links() }}
                     </div>
+                </div>
+            </div>
+        </div>
+        <!-- Create Modal -->
+        <div id="createModal" class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm">
+            <div class="modal-container">
+                <div class="w-full max-w-2xl bg-white rounded-2xl shadow-xl flex flex-col modal-content">
+                    <!-- Header -->
+                    <div class="p-6 border-b bg-red-50 rounded-t-2xl flex justify-between items-center">
+                        <div>
+                            <h3 class="text-xl font-bold text-red-600" id="modal-title">Bayar Tagihan</h3>
+                            <p class="text-sm text-red-400 mt-1">Upload bukti pembayaran (*)</p>
+                        </div>
+                        <button onclick="toggleModal('createModal')"
+                            class="text-red-500 hover:text-red-700 text-2xl p-2">✕</button>
+                    </div>
+                    <form id="createForm" action="{{ route('pembayaran.store') }}" method="POST"
+                        enctype="multipart/form-data" class="flex-1 flex flex-col overflow-hidden">
+                        @csrf
+                        <input type="hidden" name="tagihan_id" id="tagihan_id">
+                        <div class="flex-1 overflow-y-auto p-6 space-y-4 modal-scroll">
+                            <!-- Harga -->
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-gray-700">
+                                    Harga <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" id="harga" readonly
+                                    class="w-full p-2 rounded-lg border border-gray-200 bg-gray-100 text-gray-700" />
+                            </div>
+                            <!-- Upload Bukti -->
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-gray-700">
+                                    Upload Bukti Pembayaran <span class="text-red-500">*</span>
+                                </label>
+                                <div class="flex items-center justify-center">
+                                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                                        <div class="relative w-64 h-64">
+                                            <div id="image-preview-create"
+                                                class="w-full h-full bg-gray-200 rounded-xl overflow-hidden flex items-center justify-center">
+                                                <span class="text-gray-500">No image selected</span>
+                                            </div>
+                                            <label for="image-input-create"
+                                                class="absolute bottom-2 right-2 bg-white p-2 rounded-full shadow-lg cursor-pointer">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700"
+                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                </svg>
+                                            </label>
+                                            <input type="file" id="image-input-create" name="image"
+                                                accept="image/*" required class="hidden">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Footer -->
+                        <div
+                            class="p-6 border-t bg-gray-50 rounded-b-2xl flex justify-end space-x gaflex justify-end space-x-3">
+                            <button type="button" onclick="toggleModal('createModal')"
+                                class="px-6 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Batal</button>
+                            <button type="submit"
+                                class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>Simpan Data
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
