@@ -33,7 +33,7 @@
                             {{ __('Dashboard') }}
                         </x-nav-link>
 
-                        <x-dropdown class="z-[100]">
+                        {{-- <x-dropdown class="z-[100]">
                             <x-slot name="trigger">
                                 <button
                                     class="flex items-center space-x-1 px-3 py-2 text-sm font-medium text-[var(--primary-dark)] hover:text-[var(--accent-red)] transition-colors">
@@ -56,7 +56,15 @@
                                     <span class="{{ request()->routeIs('pelanggan.index') ? 'text-[var(--accent-red)] font-semibold' : '' }}">Pelanggan</span>
                                 </x-dropdown-link>
                             </x-slot>
-                        </x-dropdown>
+                        </x-dropdown> --}}
+                        <x-nav-link :href="route('paket.index')" :active="request()->routeIs('paket.index')"
+                            class="text-[var(--primary-dark)] hover:text-[var(--accent-red)] transition-colors font-medium">
+                            {{ __('Paket') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('pelanggan.index')" :active="request()->routeIs('pelanggan.index')"
+                            class="text-[var(--primary-dark)] hover:text-[var(--accent-red)] transition-colors font-medium">
+                            {{ __('Pelanggan') }}
+                        </x-nav-link>
 
                         <x-nav-link :href="route('tagihanAdmin.index')" :active="request()->routeIs('tagihanAdmin.index')"
                             class="text-[var(--primary-dark)] hover:text-[var(--accent-red)] transition-colors font-medium">
