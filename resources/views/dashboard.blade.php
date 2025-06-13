@@ -1,4 +1,14 @@
 <x-app-layout>
+        <x-slot name="header">
+        <div class="flex items-center justify-between">
+            <h2 class="text-2xl font-bold text-gray-800">
+                <span class="bg-gradient-to-r from-red-600 to-orange-500 bg-clip-text text-transparent">
+                    Dashboard Pelanggan
+                </span>
+            </h2>
+        </div>
+    </x-slot>
+
     <!-- Custom Scrollbar CSS -->
     <style>
         .modal-scroll::-webkit-scrollbar {
@@ -27,15 +37,6 @@
             overflow-y: auto;
         }
     </style>
-    <x-slot name="header md:flex">
-        <div class="flex items-center justify-between">
-            <h2 class="text-2xl font-bold text-gray-800">
-                <span class="bg-gradient-to-r from-red-600 to-orange-500 bg-clip-text text-transparent">
-                    Dashboard Pelanggan
-                </span>
-            </h2>
-        </div>
-    </x-slot>
 
     <div class="py-6 px-4 sm:px-6 lg:px-8">
         <!-- Notifikasi -->
@@ -162,7 +163,7 @@
         </div>
 
         <!-- Create Modal -->
-        <div id="createModal" class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm">
+        {{-- <div id="createModal" class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm">
             <div class="modal-container">
                 <div class="w-full max-w-2xl bg-white rounded-2xl shadow-xl flex flex-col modal-content">
                     <!-- Header -->
@@ -232,11 +233,11 @@
                     </form>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
 
     <!-- JavaScript for Modal and Image Preview -->
-    <script>
+    {{-- <script>
         function toggleModal(modalId, tagihanId = null, bulanTahun = null, harga = null) {
             const modal = document.getElementById(modalId);
             modal.classList.toggle('hidden');
@@ -269,5 +270,5 @@
                 preview.innerHTML = '<span class="text-gray-500">No image selected</span>';
             }
         });
-    </script>
+    </script> --}}
 </x-app-layout>
