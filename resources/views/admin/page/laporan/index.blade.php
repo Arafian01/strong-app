@@ -1,17 +1,46 @@
 <x-app-layout>
+    <style>
+        :root {
+            --primary-dark: #041562;
+            --primary-bg: #11468F;
+            --accent-red: #DA1212;
+            --light-gray: #EEEEEE;
+        }
+
+        .animate-pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        [x-dropdown-content] {
+            z-index: 50;
+        }
+    </style>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Laporan Pembayaran') }}
-        </h2>
+        <div class="flex items-center justify-between">
+            <h2 class="text-2xl font-bold text-[var(--primary-dark)]">
+                <span class="bg-gradient-to-r from-[var(--accent-red)] to-[var(--primary-bg)] bg-clip-text text-transparent animate-pulse">
+                    Laporan Pembayaran
+                </span>
+            </h2>
+            <div class="hidden sm:flex items-center space-x-2">
+                <span class="text-sm text-[var(--primary-dark)]">{{ today()->format('F Y') }}</span>
+            </div>
+        </div>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <div class="p-4 bg-gray-100 mb-2 rounded-xl font-bold">
+            <div class="bg-white/95 backdrop-blur-sm overflow-hidden shadow-xl border border-[var(--light-gray)] sm:rounded-2xl">
+                <div class="p-6 text-[var(--primary-dark)]">
+                    <div class="p-4 bg-[var(--light-gray)] mb-2 rounded-xl font-bold">
                         <div class="flex items-center justify-between">
-                            <div class="w-full">
+                            <div class="w-full text-[var(--primary-dark)]">
                                 Pembayaran
                             </div>
                         </div>
@@ -22,17 +51,21 @@
                             <div class="flex gap-5 my-5">
                                 <div class="mb-5 w-full">
                                     <label for="tahun"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Bulan
-                                        Tahun</label>
-                                    <input type="year" id="tahun" name="tahun"
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                        class="block mb-2 text-sm font-medium text-[var(--primary-dark)]">Tahun</label>
+                                    <select id="tahun" name="tahun" required
+                                        class="bg-white border border-[var(--light-gray)] text-[var(--primary-dark)] text-sm rounded-lg focus:ring-[var(--primary-bg)] focus:border-[var(--primary-bg)] block w-full p-2.5">
+                                        <option value="" disabled selected>Pilih Tahun</option>
+                                        @for ($year = date('Y'); $year >= 2020; $year--)
+                                            <option value="{{ $year }}">{{ $year }}</option>
+                                        @endfor
+                                    </select>
                                 </div>
                             </div>
                             <div class="flex gap-3">
                                 <button type="submit"
-                                    class=" bg-emerald-200 hover:bg-emerald-400 focus:ring-4 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm w-full sm:w-auto px-12 py-2.5 text-center dark:bg-emerald-200 dark:hover:bg-emerald-300 dark:focus:ring-emerald-300">Print</button>
-                                <button type="reset"
-                                    class="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-12 py-2.5 text-center dark:bg-red-00 dark:hover:bg-red-500 dark:focus:ring-red-500">Batal</button>
+                                    class="bg-[var(--accent-red)] text-[var(--light-gray)] hover:bg-[var(--primary-bg)] focus:ring-4 focus:outline-none focus:ring-[var(--primary-bg)] font-medium rounded-lg text-sm w-full sm:w-auto px-12 py-2.5 text-center transition-colors transform hover:scale-105">
+                                    Print
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -41,8 +74,8 @@
         </div>
     </div>
     <script>
-        document.getElementById('tanggal').addEventListener('change', function() {
-            const tahun = new Date(this.value).getFullYear();
+        document.getElementById('tahun').addEventListener('change', function() {
+            const tahun = this.value;
             console.log('Tahun yang dipilih:', tahun);
         });
     </script>
