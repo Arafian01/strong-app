@@ -52,7 +52,7 @@ class pembayaranUserController extends Controller
 
     public function store(Request $request)
     {
-        try {
+        // try {
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
@@ -67,7 +67,7 @@ class pembayaranUserController extends Controller
                 'tagihan_id' => $request->input('tagihan_id'),
                 'image' => $imageName,
                 'tanggal_kirim' => now(),
-                'status_verifikasi' => "menunggu verifikasi",
+                'status_verifikasi' => "menunggu_verifikasi",
             ];
 
             pembayarans::create($data);
@@ -79,8 +79,8 @@ class pembayaranUserController extends Controller
             ]);
 
             return back()->with('message_success', 'Data pembayaran Berhasil Ditambahkan');
-        } catch (\Exception $e) {
-            return redirect()->route('error.index')->with('error_message', 'Error: ' . $e->getMessage());
-        }
+        // } catch (\Exception $e) {
+        //     return redirect()->route('error.index')->with('error_message', 'Error: ' . $e->getMessage());
+        // }
     }
 }
