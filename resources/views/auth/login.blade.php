@@ -8,15 +8,17 @@
 
         <!-- Logo -->
         <div class="flex flex-col items-center mb-8">
-            <svg class="w-20 h-20 text-[var(--accent-red)] pulse-animation" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0" />
+            <svg class="w-20 h-20 text-[var(--accent-red)] pulse-animation" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0" />
             </svg>
-            <span class="mt-2 text-2xl font-bold text-[var(--primary-dark)]">Stront.net</span>
+
+            <span class="text-xl font-bold text-[var(--primary-dark)]">Strong<span class="text-[var(--accent-red)]">App</span></span>
         </div>
 
-        <form method="POST" action="{{ route('login') }}" 
-              x-data="{ loading: false }"
-              @submit.prevent="loading = true; $el.submit()">
+        <form method="POST" action="{{ route('login') }}" x-data="{ loading: false }"
+            @submit.prevent="loading = true; $el.submit()">
             @csrf
 
             <!-- Email Address -->
@@ -68,10 +70,12 @@
                            flex items-center justify-center text-base">
                     <div class="flex items-center justify-center w-full">
                         <span x-show="!loading" class="font-medium text-[var(--light-gray)]">{{ __('Log in') }}</span>
-                        <svg x-show="loading" class="animate-spin h-5 w-5 text-[var(--light-gray)] absolute" 
-                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                        <svg x-show="loading" class="animate-spin h-5 w-5 text-[var(--light-gray)] absolute"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
                             </path>
                         </svg>
                     </div>
@@ -94,8 +98,16 @@
     }
 
     @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.1); }
-        100% { transform: scale(1); }
+        0% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.1);
+        }
+
+        100% {
+            transform: scale(1);
+        }
     }
 </style>
