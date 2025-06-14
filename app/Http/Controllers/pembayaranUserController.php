@@ -78,7 +78,7 @@ class pembayaranUserController extends Controller
                 'status_pembayaran' => "menunggu_verifikasi",
             ]);
 
-            return back()->with('message_success', 'Data pembayaran Berhasil Ditambahkan');
+            return redirect()->route('pembayaran.index')->with('message_success', 'Data pembayaran Berhasil Ditambahkan');
         // } catch (\Exception $e) {
         //     return redirect()->route('error.index')->with('error_message', 'Error: ' . $e->getMessage());
         // }
