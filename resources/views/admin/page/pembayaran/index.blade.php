@@ -31,26 +31,28 @@
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.03); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.03);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
     </style>
 
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <h2 class="text-2xl font-bold text-[var(--primary-dark)]">
-                <span class="bg-gradient-to-r from-[var(--accent-red)] to-[var(--primary-bg)] bg-clip-text text-transparent animate-pulse">
+                <span
+                    class="bg-gradient-to-r from-[var(--accent-red)] to-[var(--primary-bg)] bg-clip-text text-transparent animate-pulse">
                     Manajemen Pembayaran
                 </span>
             </h2>
-            <div class="hidden sm:flex items-center space-x-2">
-                <span class="text-sm text-[var(--primary-dark)]">{{ today()->format('F Y') }}</span>
-                <button onclick="toggleModal('createModal')"
-                    class="bg-[var(--accent-red)] text-[var(--light-gray)] px-4 py-2 rounded-lg hover:bg-[var(--primary-bg)] transition-colors transform hover:scale-105">
-                    ➕ Tambah Pembayaran
-                </button>
-            </div>
         </div>
     </x-slot>
 
@@ -85,10 +87,12 @@
         @endif
 
         <!-- Tabel Pembayaran -->
-        <div class="bg-white/95 backdrop-blur-lg rounded-2xl shadow-lg border border-[var(--primary-bg)] p-6" data-aos="fade-up">
+        <div class="bg-white/95 backdrop-blur-lg rounded-2xl shadow-lg border border-[var(--primary-bg)] p-6"
+            data-aos="fade-up">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
                 <h3 class="text-lg font-semibold text-[var(--primary-dark)]">Daftar Pembayaran</h3>
-                <span class="text-sm text-[var(--primary-dark)] mt-2 md:mt-0">Total: {{ $pembayaran->total() }} Data</span>
+                {{-- <span class="text-sm text-[var(--primary-dark)] mt-2 md:mt-0">Total: {{ $pembayaran->total() }}
+                    Data</span> --}}
             </div>
 
             <!-- Search & Entries -->
@@ -102,18 +106,13 @@
                         Cari
                     </button>
                 </form>
-                <form method="GET" action="{{ route('pembayaranAdmin.index') }}" class="flex items-center space-x-2">
-                    <input type="hidden" name="search" value="{{ request('search') }}">
-                    <label for="entries" class="text-sm text-[var(--primary-dark)]">Tampilkan:</label>
-                    <select name="entries" onchange="this.form.submit()"
-                        class="w-20 px-2 py-1 border border-[var(--light-gray)] rounded-md focus:ring-2 focus:ring-[var(--accent-red)] text-[var(--primary-dark)]">
-                        <option value="10" {{ request('entries') == 10 ? 'selected' : '' }}>10</option>
-                        <option value="25" {{ request('entries') == 25 ? 'selected' : '' }}>25</option>
-                        <option value="50" {{ request('entries') == 50 ? 'selected' : '' }}>50</option>
-                        <option value="100" {{ request('entries') == 100 ? 'selected' : '' }}>100</option>
-                    </select>
-                    <span class="text-sm text-[var(--primary-dark)]">data</span>
-                </form>
+                <div class="hidden sm:flex items-center space-x-2">
+                    <span class="text-sm text-[var(--primary-dark)]">{{ today()->format('F Y') }}</span>
+                    <button onclick="toggleModal('createModal')"
+                        class="bg-[var(--accent-red)] text-[var(--light-gray)] px-4 py-2 rounded-lg hover:bg-[var(--primary-bg)] transition-colors transform hover:scale-105">
+                        ➕ Tambah Pembayaran
+                    </button>
+                </div>
             </div>
 
             <!-- Desktop Table -->
@@ -135,19 +134,26 @@
                     <tbody class="divide-y divide-[var(--light-gray)]">
                         @foreach ($pembayaran as $key => $p)
                             <tr class="hover:bg-[var(--light-gray)] transition-colors">
-                                <td class="px-4 py-3 text-center text-[var(--primary-dark)]">{{ $pembayaran->firstItem() + $key }}</td>
-                                <td class="px-4 py-3 text-[var(--primary-dark)]">{{ $p->tagihan->pelanggan->user->name }}</td>
                                 <td class="px-4 py-3 text-center text-[var(--primary-dark)]">
-                                    {{ \Carbon\Carbon::create()->month($p->tagihan->bulan)->format('F') }} {{ $p->tagihan->tahun }}
+                                    {{ $pembayaran->firstItem() + $key }}</td>
+                                <td class="px-4 py-3 text-[var(--primary-dark)]">
+                                    {{ $p->tagihan->pelanggan->user->name }}</td>
+                                <td class="px-4 py-3 text-center text-[var(--primary-dark)]">
+                                    {{ \Carbon\Carbon::create()->month($p->tagihan->bulan)->format('F') }}
+                                    {{ $p->tagihan->tahun }}
                                 </td>
-                                <td class="px-4 py-3 text-center text-[var(--primary-dark)]">Rp {{ number_format($p->tagihan->pelanggan->paket->harga, 0, ',', '.') }}</td>
-                                <td class="px-4 py-3 text-center text-[var(--primary-dark)]">{{ $p->tanggal_kirim }}</td>
+                                <td class="px-4 py-3 text-center text-[var(--primary-dark)]">Rp
+                                    {{ number_format($p->tagihan->pelanggan->paket->harga, 0, ',', '.') }}</td>
+                                <td class="px-4 py-3 text-center text-[var(--primary-dark)]">{{ $p->tanggal_kirim }}
+                                </td>
                                 <td class="px-4 py-3 text-center">
-                                    <span class="px-2 py-1 rounded-full text-xs {{ $p->status_verifikasi == 'diterima' ? 'bg-green-100 text-green-600' : ($p->status_verifikasi == 'menunggu_verifikasi' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600') }}">
+                                    <span
+                                        class="px-2 py-1 rounded-full text-xs {{ $p->status_verifikasi == 'diterima' ? 'bg-green-100 text-green-600' : ($p->status_verifikasi == 'menunggu_verifikasi' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600') }}">
                                         {{ ucfirst(str_replace('_', ' ', $p->status_verifikasi)) }}
                                     </span>
                                 </td>
-                                <td class="px-4 py-3 text-center text-[var(--primary-dark)]">{{ $p->tanggal_verifikasi ?? '-' }}</td>
+                                <td class="px-4 py-3 text-center text-[var(--primary-dark)]">
+                                    {{ $p->tanggal_verifikasi ?? '-' }}</td>
                                 <td class="px-4 py-3">
                                     <img src="{{ asset('pembayaran_images/' . $p->image) }}" alt="Bukti"
                                         class="w-16 h-16 object-cover rounded" />
@@ -157,7 +163,8 @@
                                         class="px-2 py-1 bg-[var(--primary-bg)] text-[var(--light-gray)] rounded-md text-xs hover:bg-[var(--accent-red)]">
                                         ✏️
                                     </button>
-                                    <button onclick="deletePembayaran('{{ $p->id }}','{{ $p->tagihan->pelanggan->user->name }}')"
+                                    <button
+                                        onclick="deletePembayaran('{{ $p->id }}','{{ $p->tagihan->pelanggan->user->name }}')"
                                         class="px-2 py-1 bg-[var(--accent-red)] text-[var(--light-gray)] rounded-md text-xs hover:bg-[var(--primary-dark)]">
                                         🗑️
                                     </button>
@@ -166,30 +173,36 @@
                         @endforeach
                     </tbody>
                 </table>
-                <div class="mt-4 flex justify-end">
+                {{-- <div class="mt-4 flex justify-end">
                     {{ $pembayaran->appends(['entries' => request('entries'), 'search' => request('search')])->links() }}
-                </div>
+                </div> --}}
             </div>
 
             <!-- Mobile Card List -->
             <div class="sm:hidden space-y-4">
                 @foreach ($pembayaran as $key => $p)
-                    <div class="bg-white/95 backdrop-blur-lg rounded-2xl shadow-lg border border-[var(--light-gray)] p-4" data-aos="fade-up" data-aos-delay="{{ $key * 100 }}">
+                    <div class="bg-white/95 backdrop-blur-lg rounded-2xl shadow-lg border border-[var(--light-gray)] p-4"
+                        data-aos="fade-up" data-aos-delay="{{ $key * 100 }}">
                         <div class="flex justify-between items-start">
                             <div>
-                                <h4 class="font-semibold text-[var(--primary-dark)]">{{ $p->tagihan->pelanggan->user->name }}</h4>
+                                <h4 class="font-semibold text-[var(--primary-dark)]">
+                                    {{ $p->tagihan->pelanggan->user->name }}</h4>
                                 <p class="text-xs text-[var(--primary-dark)]/70">
-                                    {{ \Carbon\Carbon::create()->month($p->tagihan->bulan)->format('F') }} {{ $p->tagihan->tahun }}
+                                    {{ \Carbon\Carbon::create()->month($p->tagihan->bulan)->format('F') }}
+                                    {{ $p->tagihan->tahun }}
                                 </p>
                             </div>
-                            <span class="px-2 py-1 rounded-full text-xs {{ $p->status_verifikasi == 'diterima' ? 'bg-green-100 text-green-600' : ($p->status_verifikasi == 'menunggu_verifikasi' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600') }}">
+                            <span
+                                class="px-2 py-1 rounded-full text-xs {{ $p->status_verifikasi == 'diterima' ? 'bg-green-100 text-green-600' : ($p->status_verifikasi == 'menunggu_verifikasi' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600') }}">
                                 {{ ucfirst(str_replace('_', ' ', $p->status_verifikasi)) }}
                             </span>
                         </div>
                         <div class="mt-2 grid grid-cols-2 gap-2 text-xs text-[var(--primary-dark)]">
-                            <div><span class="font-medium">Harga:</span> Rp {{ number_format($p->tagihan->pelanggan->paket->harga, 0, ',', '.') }}</div>
+                            <div><span class="font-medium">Harga:</span> Rp
+                                {{ number_format($p->tagihan->pelanggan->paket->harga, 0, ',', '.') }}</div>
                             <div><span class="font-medium">Tgl Kirim:</span> {{ $p->tanggal_kirim }}</div>
-                            <div><span class="font-medium">Tgl Verifikasi:</span> {{ $p->tanggal_verifikasi ?? '-' }}</div>
+                            <div><span class="font-medium">Tgl Verifikasi:</span> {{ $p->tanggal_verifikasi ?? '-' }}
+                            </div>
                         </div>
                         <div class="mt-2">
                             <img src="{{ asset('pembayaran_images/' . $p->image) }}" alt="Bukti"
@@ -200,28 +213,49 @@
                                 class="px-3 py-1 bg-[var(--primary-bg)] text-[var(--light-gray)] rounded-md text-xs hover:bg-[var(--accent-red)]">
                                 ✏️ Edit
                             </button>
-                            <button onclick="deletePembayaran('{{ $p->id }}','{{ $p->tagihan->pelanggan->user->name }}')"
+                            <button
+                                onclick="deletePembayaran('{{ $p->id }}','{{ $p->tagihan->pelanggan->user->name }}')"
                                 class="px-3 py-1 bg-[var(--accent-red)] text-[var(--light-gray)] rounded-md text-xs hover:bg-[var(--primary-dark)]">
                                 🗑️ Hapus
                             </button>
                         </div>
                     </div>
                 @endforeach
-                <div class="pt-2">
+                {{-- <div class="pt-2">
                     {{ $pembayaran->appends(['entries' => request('entries'), 'search' => request('search')])->links() }}
-                </div>
+                </div> --}}
+
+            </div>
+
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 space-y-2 sm:space-y-0">
+                <form method="GET" action="{{ route('tagihanAdmin.index') }}" class="flex items-center space-x-2">
+                    <input type="hidden" name="search" value="{{ request('search') }}">
+                    <label for="entries" class="text-sm text-[var(--primary-dark)]">Tampilkan:</label>
+                    <select name="entries" onchange="this.form.submit()"
+                        class="w-20 px-2 py-1 border border-[var(--light-gray)] rounded-md focus:ring-2 focus:ring-[var(--accent-red)] text-[var(--primary-dark)]">
+                        <option value="10" {{ request('entries') == 10 ? 'selected' : '' }}>10</option>
+                        <option value="25" {{ request('entries') == 25 ? 'selected' : '' }}>25</option>
+                        <option value="50" {{ request('entries') == 50 ? 'selected' : '' }}>50</option>
+                        <option value="100" {{ request('entries') == 100 ? 'selected' : '' }}>100</option>
+                    </select>
+                    <span class="text-sm text-[var(--primary-dark)]">data</span>
+                </form>
+                {{ $pembayaran->appends(['entries' => request('entries'), 'search' => request('search')])->links() }}
+
             </div>
         </div>
 
         <!-- Create Modal -->
         <div id="createModal" class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm">
             <div class="fixed inset-0 flex items-center justify-center p-4">
-                <div class="w-full max-w-2xl max-h-[calc(100vh-4rem)] bg-white/95 backdrop-blur-lg rounded-2xl shadow-xl border border-[var(--primary-bg)] flex flex-col">
+                <div
+                    class="w-full max-w-2xl max-h-[calc(100vh-4rem)] bg-white/95 backdrop-blur-lg rounded-2xl shadow-xl border border-[var(--primary-bg)] flex flex-col">
                     <!-- Header -->
                     <div class="p-6 border-b bg-[var(--light-gray)] rounded-t-2xl flex justify-between items-center">
                         <div>
                             <h3 class="text-xl font-bold text-[var(--primary-dark)]">Tambah Pembayaran Baru</h3>
-                            <p class="text-sm text-[var(--primary-dark)]/70 mt-1">Isi semua bidang yang diperlukan (*)</p>
+                            <p class="text-sm text-[var(--primary-dark)]/70 mt-1">Isi semua bidang yang diperlukan (*)
+                            </p>
                         </div>
                         <button onclick="toggleModal('createModal')"
                             class="text-[var(--primary-dark)] hover:text-[var(--accent-red)] text-2xl p-2">
@@ -229,7 +263,8 @@
                         </button>
                     </div>
                     <!-- Body with Scroll -->
-                    <form id="createForm" action="{{ route('pembayaranAdmin.store') }}" method="POST" enctype="multipart/form-data" class="flex-1 flex flex-col overflow-hidden">
+                    <form id="createForm" action="{{ route('pembayaranAdmin.store') }}" method="POST"
+                        enctype="multipart/form-data" class="flex-1 flex flex-col overflow-hidden">
                         @csrf
                         <div class="flex-1 overflow-y-auto p-6 space-y-4 modal-scroll">
                             <!-- Upload Bukti -->
@@ -246,12 +281,18 @@
                                             </div>
                                             <label for="image-input-create"
                                                 class="absolute bottom-2 right-2 bg-white p-2 rounded-full shadow-lg cursor-pointer">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[var(--primary-dark)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                    class="h-6 w-6 text-[var(--primary-dark)]" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                                                 </svg>
                                             </label>
-                                            <input type="file" id="image-input-create" name="image" accept="image/*" required class="hidden">
+                                            <input type="file" id="image-input-create" name="image"
+                                                accept="image/*" required class="hidden">
                                         </div>
                                     </div>
                                 </div>
@@ -268,7 +309,8 @@
                                         @if ($t->status_pembayaran == 'belum_dibayar' || $t->status_pembayaran == 'ditolak')
                                             <option value="{{ $t->id }}">
                                                 {{ $t->pelanggan->user->name }},
-                                                {{ \Carbon\Carbon::create()->month($t->bulan)->format('F') }} {{ $t->tahun }}
+                                                {{ \Carbon\Carbon::create()->month($t->bulan)->format('F') }}
+                                                {{ $t->tahun }}
                                             </option>
                                         @endif
                                     @endforeach
@@ -283,7 +325,8 @@
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         📅
                                     </div>
-                                    <x-text-input type="date" name="tanggal_kirim" value="{{ date('Y-m-d') }}" required
+                                    <x-text-input type="date" name="tanggal_kirim" value="{{ date('Y-m-d') }}"
+                                        required
                                         class="pl-10 w-full p-2 rounded-lg border-[var(--light-gray)] focus:border-[var(--accent-red)] focus:ring-[var(--accent-red)] text-[var(--primary-dark)]" />
                                 </div>
                             </div>
@@ -310,7 +353,8 @@
                             <button type="submit"
                                 class="px-6 py-2 bg-[var(--accent-red)] text-[var(--light-gray)] rounded-lg hover:bg-[var(--primary-bg)] flex items-center">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
                                 </svg>
                                 Simpan Data
                             </button>
@@ -323,7 +367,8 @@
         <!-- Edit Modal -->
         <div id="editModal" class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm">
             <div class="fixed inset-0 flex items-center justify-center p-4">
-                <div class="w-full max-w-2xl max-h-[calc(100vh-4rem)] bg-white/95 backdrop-blur-lg rounded-2xl shadow-xl border border-[var(--primary-bg)] flex flex-col">
+                <div
+                    class="w-full max-w-2xl max-h-[calc(100vh-4rem)] bg-white/95 backdrop-blur-lg rounded-2xl shadow-xl border border-[var(--primary-bg)] flex flex-col">
                     <!-- Header -->
                     <div class="p-6 border-b bg-[var(--light-gray)] rounded-t-2xl flex justify-between items-center">
                         <div>
@@ -336,7 +381,8 @@
                         </button>
                     </div>
                     <!-- Body with Scroll -->
-                    <form id="editForm" method="POST" enctype="multipart/form-data" class="flex-1 flex flex-col overflow-hidden">
+                    <form id="editForm" method="POST" enctype="multipart/form-data"
+                        class="flex-1 flex flex-col overflow-hidden">
                         @csrf
                         @method('PUT')
                         <div class="flex-1 overflow-y-auto p-6 space-y-4 modal-scroll">
@@ -354,12 +400,18 @@
                                             </div>
                                             <label for="image-input-edit"
                                                 class="absolute bottom-2 right-2 bg-white p-2 rounded-full shadow-lg cursor-pointer">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[var(--primary-dark)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                    class="h-6 w-6 text-[var(--primary-dark)]" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                                                 </svg>
                                             </label>
-                                            <input type="file" id="image-input-edit" name="image" accept="image/*" class="hidden">
+                                            <input type="file" id="image-input-edit" name="image"
+                                                accept="image/*" class="hidden">
                                         </div>
                                     </div>
                                 </div>
@@ -375,7 +427,8 @@
                                     @foreach ($tagihan as $t)
                                         <option value="{{ $t->id }}">
                                             {{ $t->pelanggan->user->name }},
-                                            {{ \Carbon\Carbon::create()->month($t->bulan)->format('F') }} {{ $t->tahun }}
+                                            {{ \Carbon\Carbon::create()->month($t->bulan)->format('F') }}
+                                            {{ $t->tahun }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -389,7 +442,8 @@
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         📅
                                     </div>
-                                    <x-text-input type="date" id="edit_tanggal_kirim" name="tanggal_kirim" required
+                                    <x-text-input type="date" id="edit_tanggal_kirim" name="tanggal_kirim"
+                                        required
                                         class="pl-10 w-full p-2 rounded-lg border-[var(--light-gray)] focus:border-[var(--accent-red)] focus:ring-[var(--accent-red)] text-[var(--primary-dark)]" />
                                 </div>
                             </div>
@@ -416,7 +470,8 @@
                             <button type="submit"
                                 class="px-6 py-2 bg-[var(--accent-red)] text-[var(--light-gray)] rounded-lg hover:bg-[var(--primary-bg)] flex items-center">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
                                 </svg>
                                 Simpan Perubahan
                             </button>
@@ -449,7 +504,8 @@
             if (file) {
                 const reader = new FileReader();
                 reader.onload = e => {
-                    preview.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover rounded-xl" alt="Preview">`;
+                    preview.innerHTML =
+                        `<img src="${e.target.result}" class="w-full h-full object-cover rounded-xl" alt="Preview">`;
                 };
                 reader.readAsDataURL(file);
             } else {
@@ -464,7 +520,8 @@
             if (file) {
                 const reader = new FileReader();
                 reader.onload = e => {
-                    preview.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover rounded-xl" alt="Preview">`;
+                    preview.innerHTML =
+                        `<img src="${e.target.result}" class="w-full h-full object-cover rounded-xl" alt="Preview">`;
                 };
                 reader.readAsDataURL(file);
             } else {
@@ -480,7 +537,8 @@
             document.getElementById('edit_tanggal_kirim').value = pembayaran.tanggal_kirim;
             document.getElementById('edit_status_verifikasi').value = pembayaran.status_verifikasi;
             const imgPrev = document.getElementById('image-preview-edit');
-            imgPrev.innerHTML = `<img src="{{ asset('pembayaran_images') }}/${pembayaran.image}" class="w-full h-full object-cover rounded-xl" alt="Bukti">`;
+            imgPrev.innerHTML =
+                `<img src="{{ asset('pembayaran_images') }}/${pembayaran.image}" class="w-full h-full object-cover rounded-xl" alt="Bukti">`;
             toggleModal('editModal');
         }
 
