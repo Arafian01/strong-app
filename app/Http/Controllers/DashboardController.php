@@ -26,8 +26,8 @@ class DashboardController extends Controller
             ->pluck('total', 'status');
 
         // 2. Jumlah tagihan bulan ini berdasarkan status pembayaran
-        $jumlahTagihan = tagihans::whereYear('jatuh_tempo', $currentYear)
-            ->whereMonth('jatuh_tempo', $currentMonth)
+        $jumlahTagihan = tagihans::where('bulan', $currentMonth)
+            // ->whereMonth('', $currentMonth)
             ->select('status_pembayaran', DB::raw('count(*) as total'))
             ->groupBy('status_pembayaran')
             ->pluck('total', 'status_pembayaran');
