@@ -170,7 +170,7 @@
     <section id="fitur" class="py-16 bg-white">
         <div class="max-w-6xl mx-auto px-4">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-[var(--primary-dark)] mb-4" data-aos="zoom-in">Mengapa Stront.net?
+                <h2 class="text-3xl font-bold text-[var(--primary-dark)] mb-4" data-aos="zoom-in">Mengapa Strong.net?
                 </h2>
                 <p class="text-[var(--primary-dark)]/70 max-w-2xl mx-auto" data-aos="zoom-in">Solusi internet premium
                     untuk kebutuhan modern Anda.</p>
@@ -352,7 +352,7 @@
                     data-aos="fade-up">
                     <button class="w-full text-left focus:outline-none flex justify-between items-center"
                         onclick="toggleFAQ(this)">
-                        <h4 class="font-semibold text-lg text-[var(--primary-dark)]">Apa wilayah cakupan Stront.net?
+                        <h4 class="font-semibold text-lg text-[var(--primary-dark)]">Apa wilayah cakupan Strong.net?
                         </h4>
                         <svg class="w-6 h-6 text-[var(--accent-red)] transition-transform duration-300" fill="none"
                             stroke="currentColor" viewBox="0 0 24 24">
@@ -391,7 +391,7 @@
                 <div>
                     <h4
                         class="text-xl font-bold mb-4 bg-gradient-to-r from-[var(--accent-red)] to-[var(--light-gray)] bg-clip-text text-transparent">
-                        Stront.net</h4>
+                        Strong.net</h4>
                     <p class="text-sm text-[var(--light-gray)]/70">Internet rumah tercepat dengan teknologi fiber optik
                         terbaru.</p>
                 </div>
@@ -410,7 +410,7 @@
                     <h4 class="text-lg font-semibold mb-4 text-[var(--light-gray)]">Kontak</h4>
                     <ul class="space-y-2 text-sm text-[var(--light-gray)]/70">
                         <li>WhatsApp: 0812-3456-7890</li>
-                        <li>Email: support@stront.net</li>
+                        <li>Email: support@strong.net</li>
                         <li>Dukungan Teknis 24/7</li>
                     </ul>
                 </div>
@@ -439,7 +439,7 @@
                 </div>
             </div>
             <div class="border-t border-[var(--light-gray)]/20 mt-8 pt-8">
-                <p class="text-center text-sm text-[var(--light-gray)]/70">© 2025 Stront.net. Hak Cipta Dilindungi.</p>
+                <p class="text-center text-sm text-[var(--light-gray)]/70">© 2025 Strong.net. Hak Cipta Dilindungi.</p>
             </div>
         </div>
     </footer>

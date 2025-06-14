@@ -8,7 +8,7 @@
             <svg class="w-20 h-20 text-[var(--accent-red)] pulse-animation" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0" />
             </svg>
-            <span class="mt-2 text-2xl font-bold text-[var(--primary-dark)]">Stront.net</span>
+            <span class="text-xl font-bold text-[var(--primary-dark)]">Strong<span class="text-[var(--accent-red)]">App</span></span>
         </div>
 
         <form method="POST" action="{{ route('register') }}" 
