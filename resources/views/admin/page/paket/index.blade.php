@@ -6,12 +6,12 @@
                     Manajemen Paket
                 </span>
             </h2>
-            <div class="flex items-center space-x-4">
+            {{-- <div class="flex items-center space-x-4">
                 <span class="text-sm font-medium text-[var(--primary-dark)]">{{ today()->format('d F Y') }}</span>
                 <div class="w-10 h-10 bg-[var(--accent-red)] rounded-full flex items-center justify-center shadow-md">
                     <span class="text-[var(--light-gray)] text-lg font-bold">{{ substr(Auth::user()->name, 0, 1) }}</span>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </x-slot>
 
