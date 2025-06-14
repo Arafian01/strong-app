@@ -110,7 +110,7 @@
                     <span class="text-sm text-[var(--primary-dark)]">{{ today()->format('F Y') }}</span>
                     <button onclick="toggleModal('createModal')"
                         class="bg-[var(--accent-red)] text-[var(--light-gray)] px-4 py-2 rounded-lg hover:bg-[var(--primary-bg)] transition-colors transform hover:scale-105">
-                        ➕ Tambah Pembayaran
+                        + Tambah Pembayaran
                     </button>
                 </div>
             </div>
