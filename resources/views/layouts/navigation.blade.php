@@ -1,4 +1,5 @@
-<nav x-data="{ open: false }" class="bg-white/95 backdrop-blur-lg border-b border-[var(--light-gray)] shadow-sm  w-full z-50">
+<nav x-data="{ open: false }"
+    class="bg-white/95 backdrop-blur-lg border-b border-[var(--light-gray)] shadow-sm  w-full z-50">
     <!-- Primary Navigation Menu -->
     @php
         use App\Models\notifikasis;
@@ -16,13 +17,15 @@
             <div class="flex items-center">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}" class="flex items-center space-x-2">
-                        <svg class="w-8 h-8 text-[var(--accent-red)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    {{-- <a href="{{ route('dashboard') }}" class="flex items-center space-x-2"> --}}
+                        <svg class="w-7 h-7 text-[var(--accent-red)] pulse-animation mr-2" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M5.636 18.364a9 9 0 010-12.728m12.728 0a9 9 0 010 12.728m-9.9-2.829a5 5 0 010-7.07m7.07 0a5 5 0 010 7.07M12 12a1 1 0 11-2 0 1 1 0 012 0z" />
+                                d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0" />
                         </svg>
-                        <span class="text-xl font-bold text-[var(--primary-dark)]">Strong<span class="text-[var(--accent-red)]">App</span></span>
-                    </a>
+                        <span class="text-xl font-bold text-[var(--primary-dark)]">Strong<span
+                                class="text-[var(--accent-red)]">App</span></span>
+                    {{-- </a> --}}
                 </div>
 
                 <!-- Navigation Links -->
@@ -105,7 +108,8 @@
                 <!-- Notifications -->
                 <a href="{{ route('notifikasi.index') }}"
                     class="relative p-2 hover:bg-[var(--light-gray)] rounded-full transition-colors transform hover:scale-105">
-                    <svg class="w-6 h-6 text-[var(--primary-dark)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-6 h-6 text-[var(--primary-dark)]" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                     </svg>
@@ -119,13 +123,15 @@
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="flex items-center space-x-2 group">
-                            <div class="bg-[var(--primary-bg)] text-[var(--light-gray)] px-4 py-1.5 rounded-full text-sm font-medium shadow-sm transition-transform group-hover:scale-105">
+                            <div
+                                class="bg-[var(--primary-bg)] text-[var(--light-gray)] px-4 py-1.5 rounded-full text-sm font-medium shadow-sm transition-transform group-hover:scale-105">
                                 {{ Str::limit(Auth::user()->name, 15) }}
                             </div>
                         </button>
                     </x-slot>
 
-                    <x-slot name="content" class="mt-4 bg-white/95 backdrop-blur-sm rounded-lg shadow-xl border border-[var(--light-gray)]">
+                    <x-slot name="content"
+                        class="mt-4 bg-white/95 backdrop-blur-sm rounded-lg shadow-xl border border-[var(--light-gray)]">
                         <x-dropdown-link :href="route('profile.edit')"
                             class="px-4 py-2.5 text-sm text-[var(--primary-dark)] hover:bg-[var(--light-gray)] hover:text-[var(--accent-red)] flex items-center transition-colors">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -154,7 +160,8 @@
             <!-- Mobile Menu Button -->
             <div class="-me-2 flex items-center sm:hidden">
                 <button @click="open = ! open" class="p-2 hover:bg-[var(--light-gray)] rounded-full transition-colors">
-                    <svg class="h-6 w-6 text-[var(--primary-dark)]" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                    <svg class="h-6 w-6 text-[var(--primary-dark)]" stroke="currentColor" fill="none"
+                        viewBox="0 0 24 24">
                         <path :class="{ 'hidden': open, 'inline-flex': !open }" stroke-linecap="round"
                             stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         <path :class="{ 'hidden': !open, 'inline-flex': open }" stroke-linecap="round"
@@ -166,7 +173,8 @@
     </div>
 
     <!-- Mobile Menu -->
-    <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden bg-white/95 backdrop-blur-sm border-t border-[var(--light-gray)]">
+    <div :class="{ 'block': open, 'hidden': !open }"
+        class="hidden sm:hidden bg-white/95 backdrop-blur-sm border-t border-[var(--light-gray)]">
         <div class="pt-2 pb-3 space-y-1">
             @can('role-admin')
                 <x-responsive-nav-link :href="route('dashboardAdmin.index')" :active="request()->routeIs('dashboardAdmin.index')"
@@ -217,7 +225,8 @@
         <!-- Mobile Profile -->
         <div class="pt-4 pb-3 border-t border-[var(--light-gray)]">
             <div class="px-4">
-                <div class="text-sm font-medium text-[var(--primary-dark)]">{{ Str::limit(Auth::user()->name, 20) }}</div>
+                <div class="text-sm font-medium text-[var(--primary-dark)]">{{ Str::limit(Auth::user()->name, 20) }}
+                </div>
             </div>
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')"
