@@ -28,6 +28,11 @@ class tagihanUserController extends Controller
                         ->orWhere('jatuh_tempo', 'like', "%$search%");
                 });
             })
+            ->orderByRaw("CASE status_pembayaran 
+                    WHEN 'belum_dibayar' THEN 1 
+                    WHEN 'menunggu_verifikasi' THEN 2 
+                    WHEN 'lunas' THEN 3 
+                    ELSE 4 END")
             ->orderBy('tahun', 'desc')
             ->orderBy('bulan', 'desc')
             ->paginate($entries);
