@@ -33,7 +33,7 @@
                     <span class="text-sm text-[var(--primary-dark)]">{{ today()->format('F Y') }}</span>
                     <button onclick="toggleModal('createModal')"
                         class="bg-[var(--accent-red)] text-[var(--light-gray)] px-4 py-2 rounded-lg hover:bg-[var(--primary-bg)] transition-colors transform hover:scale-105">
-                        ➕ Buat Notifikasi
+                        + Buat Notifikasi
                     </button>
                 </div>
             @endcan
@@ -252,8 +252,8 @@
                 text: "Anda tidak akan bisa mengembalikan data ini!",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '[var(--accent-red)]',
-                cancelButtonColor: '[var(--primary-bg)]',
+                confirmButtonColor: '#DA1212',
+                cancelButtonColor: '#11468F',
                 confirmButtonText: 'Ya, Hapus!'
             }).then((result) => {
                 if (result.isConfirmed) {
