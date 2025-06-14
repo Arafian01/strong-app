@@ -42,7 +42,7 @@ class PelangganController extends Controller
 
     public function store(Request $request)
     {
-        try {
+        // try {
             $datauser = User::create([
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
@@ -74,10 +74,10 @@ class PelangganController extends Controller
 
             return redirect()
                 ->route('pelanggan.index')->with('message_insert', 'Data pelanggan Sudah ditambahkan ');
-        } catch (\Exception $e) {
-            return redirect()
-                ->route('error.index')->with('error_message', 'terjadi kesalahan saat menambahkan data: ' . $e->getMessage());
-        };
+        // } catch (\Exception $e) {
+        //     return redirect()
+        //         ->route('error.index')->with('error_message', 'terjadi kesalahan saat menambahkan data: ' . $e->getMessage());
+        // };
     }
     public function update(Request $request, String $id)
     {
