@@ -46,7 +46,7 @@ class TagihanController extends Controller
                 'tagihan' => $tagihan,
                 'search' => $search,
                 'entries' => $entries,
-                'pelanggan' => pelanggans::select('id', 'user_id')->with('user:id,name')->get(),
+                'pelanggan' => pelanggans::select('id', 'user_id')->with('user:id,name')->where('status', 'aktif')->get(),
                 'user' => []
             ]);
         // } catch (\Exception $e) {
