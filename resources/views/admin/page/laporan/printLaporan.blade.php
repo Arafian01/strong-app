@@ -32,7 +32,7 @@
         <!-- Header -->
         <div class="flex items-center border-b-2 pb-4 mb-6">
             <div class="w-20 h-20 bg-contain bg-no-repeat bg-center" style="background-image: url('logo.png');"></div>
-            <div class="flex-1 text-center text-2xl font-bold">Laporan Pembayaran</div>
+            <div class="flex-1 text-center text-2xl font-bold">Laporan Pembayaran {{ $tahun }}</div>
         </div>
 
         <!-- Table -->
@@ -107,7 +107,7 @@
             <div class="w-1/3 text-center">
                 <p class="mb-16">Mengetahui,</p>
                 <p>______________________</p>
-                <p>Petugas</p>
+                <p>Admin</p>
             </div>
         </div>
     </div>
